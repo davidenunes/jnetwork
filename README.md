@@ -10,7 +10,7 @@ This library hides the implementation details by using the [Guice](http://code.g
 which is a dependency injection framework from *Google* that allows for code modularity.
 
 ## Hello Network
-To create *Network* instances we must first initialise our [Guice](http://code.google.com/p/google-guice/) injector. 
+To create `Network` instances we must first initialise our [Guice](http://code.google.com/p/google-guice/) injector. 
 This entity is resposible for the construction of our application graph of dependencies. 
 
 ```java
@@ -18,7 +18,7 @@ Injector injector = Guice.createInjector(new NetworkModule());
 Network network = injector.getInstance(Network.class);
 ```
 
-We create an *injector* instance from a `NetworkModule`. This module serves as a *Guice* configuration, telling 
+We create an `Injector` instance from a `NetworkModule`. This module serves as a *Guice* configuration, telling 
 it how to resolve the various dependencies in the network library.
 
 To **create a network** we simply ask our injector for a instance of the `Network.class`. The injector 
