@@ -46,6 +46,13 @@ network.addLink(node1,node2, link);
 Thats pretty much it. You can now add more nodes, return links between existing nodes, get the neighbours of a 
 given node, etc.
 
+## Latest releases
+### Nightly builds
+Current version is 0.0.1-SNAPSHOT
+* [bhave.network-0.0.1-SNAPSHOT.jar](https://mega.co.nz/#!qZRkASrL!JsvmaATj_WNjQlvJT5UL6VTMr4t4hyCjIAqAQEL39CQ)
+* [bhave.network-0.0.1-SNAPSHOT-sources.jar](https://mega.co.nz/#!mQBnmCBb!NREfQR7ZEzLoxNLrmfpli1YoW24zybW1_WcM0Khqoc8)
+* [bhave.network-0.0.1-SNAPSHOT-javadoc.jar](https://mega.co.nz/#!eM5jyLqD!DTJJKGY_yvsD43BDJza9ZFd8OdtVXHADe-n-UX9xnsc)
+
 ## Licence
  B-Have Network Library
  
