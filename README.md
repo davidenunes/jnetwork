@@ -1,10 +1,10 @@
 # B-Have Network Library
 A simple lightweight **network / graph library**. The core network api allows for the creation and 
 manipulation of network instances with nodes connected by links. This is possible using three 
-basic building blocks: **Network** instances, **Node** instances and **Link** instances.
+basic building blocks: `Network` instances, `Node` instances and `Link` instances.
 
-The *Node* and *Link* elements serve as placeholders for various properties. These are created 
-and manipulated by *Network* instances.
+The `Node` and `Link` elements serve as placeholders for various properties. These are created 
+and manipulated by `Network` instances.
 
 This library hides the implementation details by using the [Guice](http://code.google.com/p/google-guice/)
 which is a dependency injection framework from *Google* that allows for code modularity.
