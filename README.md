@@ -6,10 +6,11 @@
 
 
 ## Licence
-
- Copyright (C) 2013 Davide Nunes
- Authors : Davide Nunes <davex.pt@gmail.com>
- Website : http://davidenunes.com 
+ B-Have Network Library
+ 
+ * Copyright (C) 2013 Davide Nunes 
+ * Authors : Davide Nunes <davex.pt@gmail.com>
+ * Website : http://bhaveproject.org
  
  The b-have network library is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
