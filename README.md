@@ -11,7 +11,7 @@ which is a dependency injection framework from *Google* that allows for code mod
 
 ## Hello Network
 To create `Network` instances we must first initialise our [Guice](http://code.google.com/p/google-guice/) injector. 
-This entity is resposible for the construction of our application graph of dependencies. 
+This entity is resposible for the construction of our library dependency graph. 
 
 ```java
 Injector injector = Guice.createInjector(new NetworkModule());
