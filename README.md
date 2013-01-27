@@ -1,15 +1,14 @@
 # B-Have Network Library
-A simple lightweight **network / graph library**. The core network api allows for the creation and 
-manipulation of network instances with nodes connected by links. This is possible using three 
-basic building blocks: `Network` instances, `Node` instances and `Link` instances.
-
-The `Node` and `Link` elements serve as placeholders for various properties. These are created 
-and manipulated by `Network` instances.
+A simple lightweight **network / graph library** written in Java. This is a software library that provides a simple set of tools 
+to model and analyse data that can be represented as a graph or network. It provides facilities to treat a network
+either as directed or undirected using the same simple `Network` API. 
 
 This library hides the implementation details by using the [Guice](http://code.google.com/p/google-guice/)
 which is a dependency injection framework from *Google* that allows for code modularity.
 
 ## Hello Network
+There are three basic building blocks in this network API: `Network` objects, `Node` objects and `Link` objects.
+
 To create `Network` instances we must first initialise our [Guice](http://code.google.com/p/google-guice/) injector. 
 This entity is resposible for the construction of our library dependency graph. 
 
@@ -24,8 +23,9 @@ it how to resolve the various dependencies in the network library.
 To **create a network** we simply ask our injector for a instance of the `Network.class`. The injector 
 will do the rest and supply an instance from an implementation of `Network` ready to be used.
 
-The rest is pretty straight forward. We can do stuff like create new nodes, create new links, and add these
-to our network.
+The rest is pretty straight forward. The creation of new `Node` and `Link` objects is handled by the `Network`. 
+Bellow you can see a simple example of how one can create new nodes and links and add them to an existing network 
+instance.
 
 ```java
 //create new nodes
