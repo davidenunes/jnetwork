@@ -56,7 +56,6 @@ public class HashNetwork implements Network {
 	 * Constructor. Initialises all the sets of nodes, links and all the other
 	 * necessary structures
 	 * 
-	 * @param id
 	 */
 	@Inject
 	public HashNetwork() {
