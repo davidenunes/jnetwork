@@ -43,6 +43,22 @@ public class SimpleLink implements Link {
 		properties = new Properties();
 	}
 
+	/**
+	 * Copy Constructor. Creates a link by copying an existing Link. This is to
+	 * avoid the clone
+	 * 
+	 * @param link
+	 *            a link to be copied
+	 */
+	public SimpleLink(SimpleLink link) {
+		this(link.getID());
+		this.value = link.value;
+
+		for (Object key : link.properties.keySet()) {
+			this.properties.put(key, link.properties.get(key));
+		}
+	}
+
 	@Override
 	public int getID() {
 		return id;

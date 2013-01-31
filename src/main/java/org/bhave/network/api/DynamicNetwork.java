@@ -2,6 +2,58 @@ package org.bhave.network.api;
 
 import java.util.Set;
 
+/**
+ * 
+ * <p>
+ * Defines a network / graph data structure that contains <b>Nodes</b> with
+ * connections between them called edges or <b>Links</b>. It has the same
+ * interface as a {@link Network Network} with additional elements to allow to
+ * model change over discrete time. What this means is that we can keep track of
+ * nodes, links, node values and link values over time in the same network
+ * structure.
+ * </p>
+ * 
+ * <p>
+ * {@link DynamicNetwork} instances are created with one time instance by
+ * default. This is t = 0 or t = {@link DynamicNetwork#getFirstTime()} if you
+ * prefer. You can use the network as you would use the {@link Network}
+ * interface.
+ * </p>
+ * 
+ * <p>
+ * If we wish to create another instant in time for the network, we can just use
+ * {@link DynamicNetwork#setCurrentTime(int)} with the desired value (for
+ * example 1, 2, 50, ..., etc). Whenever
+ * {@link DynamicNetwork#setCurrentTime(int)} is used with a given value for
+ * <i>t</i>, if this time instance does not yet exist, it is initialised with a
+ * copy of the network state from the time instance immediately before the given
+ * <i>t</i>.
+ * 
+ * <br>
+ * As an example, if your network contains the time instances {0, 1, 2}, and you
+ * use {@link DynamicNetwork#setCurrentTime(int)} with t = 3, the new time
+ * instance will contain a network with a deep copy of t = 2.
+ * </p>
+ * 
+ * <b>Node:</b> time instants do not have to be contiguous. Just with a positive
+ * value t >= 0. You can have time instances like {0, 1, 5, 6, 10, 11, 12}
+ * 
+ * <h2>Getting a Network Instance</h2>
+ * <p>
+ * Just like with {@link Network}, you can get dynamic network instances as
+ * follows:
+ * 
+ * <br>
+ * <br>
+ * 
+ * <code>Injector injector = Guice.createInjector(new NetworkModule());</code><br />
+ * <code>Network network = injector.getInstance(Network.class);</code>
+ * 
+ * </p>
+ * 
+ * @author Davide Nunes
+ * 
+ */
 public interface DynamicNetwork extends Network {
 
 	/**
@@ -11,20 +63,44 @@ public interface DynamicNetwork extends Network {
 	 * @param t
 	 *            a discrete time with t >= 0
 	 */
-	public void setTime(int t);
+	public void setCurrentTime(int t);
 
 	/**
 	 * Returns the current time instant in which you are working
 	 * 
 	 * @return t a discrete time
 	 */
-	public int getTime();
+	public int getCurrentTime();
+
+	/**
+	 * Returns the last time instant of this network
+	 * 
+	 * 
+	 * @return t a discrete time
+	 */
+	public int getLastTime();
+
+	/**
+	 * Returns the first time instant of this network
+	 * 
+	 * 
+	 * @return t a discrete time
+	 */
+	public int getFirstTime();
 
 	/**
 	 * Returns the set of time instances for which there are events of node /
-	 * link insertion
+	 * link insertion, etc.
 	 * 
-	 * @return
+	 * Example: {0, 1, 10, 11, 50}
+	 * 
+	 * <br>
+	 * <br>
+	 * 
+	 * <b>Note: </b> when dynamic networks are created they contain a time
+	 * instance set {0}
+	 * 
+	 * @return a set of time instances
 	 */
 	public Set<? extends Integer> getTimeInstances();
 }

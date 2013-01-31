@@ -72,7 +72,7 @@ import org.bhave.network.NetworkModule;
  * 
  * @author Davide Nunes
  */
-public interface Network {
+public interface Network{
 
 	/**
 	 * Adds a node to the network. Fails if the node already exists or if the
@@ -387,5 +387,5 @@ public interface Network {
 	 * @see Link
 	 */
 	Link createLink();
-
+	
 }

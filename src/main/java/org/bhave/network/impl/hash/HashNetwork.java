@@ -37,7 +37,7 @@ import org.bhave.network.api.Node;
 import com.google.inject.Inject;
 
 /**
- * Implementation of the {@link Network} interface. 
+ * Implementation of the {@link Network} interface.
  * 
  * @author Davide Nunes
  * @see Network
@@ -64,6 +64,34 @@ public class HashNetwork implements Network {
 
 		nodes = new HashMap<>();
 		links = new HashMap<>();
+	}
+
+	public HashNetwork(HashNetwork network) {
+		this();
+
+		// copy nodes 
+		for (Integer key : network.nodes.keySet()) {
+			SimpleNode newNode = new SimpleNode(
+					(SimpleNode) network.nodes.get(key));
+			this.addNode(newNode);
+		}
+		// copy links
+		for (Object key : network.nl.keySet()) {
+			MultiKey nodeKey = (MultiKey) key;
+			// get link
+			SimpleLink newLink = new SimpleLink(
+					(SimpleLink) network.nl.get(key));
+
+			Node node1 = (Node) nodeKey.getKey(0);
+			Node node2 = (Node) nodeKey.getKey(1);
+			
+			//add new link
+			this.addLink(node1, node2, newLink);
+		}
+		
+		this.nextNodeID = network.nextNodeID;
+		this.nextLinkID = network.nextLinkID;
+
 	}
 
 	@Override

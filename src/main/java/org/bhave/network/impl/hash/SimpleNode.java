@@ -32,14 +32,29 @@ import org.bhave.network.api.Node;
  * 
  * @author Davide Nunes
  */
-public class SimpleNode implements Node{
+public class SimpleNode implements Node {
 	private int id;
-	
+
 	private Properties properties;
-	
+
 	public SimpleNode(int id) {
 		this.id = id;
 		this.properties = new Properties();
+	}
+
+	/**
+	 * Copy Constructor. Creates a link by copying an existing Link. This is to
+	 * avoid the clone
+	 * 
+	 * @param link
+	 *            a link to be copied
+	 */
+	public SimpleNode(SimpleNode node) {
+		this(node.getID());
+
+		for (Object key : node.properties.keySet()) {
+			this.properties.put(key, node.properties.get(key));
+		}
 	}
 
 	@Override
@@ -50,7 +65,7 @@ public class SimpleNode implements Node{
 	@Override
 	public void setProperty(String key, String value) {
 		properties.setProperty(key, value);
-		
+
 	}
 
 	@Override
@@ -84,9 +99,5 @@ public class SimpleNode implements Node{
 			return false;
 		return true;
 	}
-	
-	
-	
-	
 
 }

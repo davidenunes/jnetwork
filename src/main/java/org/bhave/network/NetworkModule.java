@@ -23,8 +23,10 @@
  */
 package org.bhave.network;
 
+import org.bhave.network.api.DynamicNetwork;
 import org.bhave.network.api.Network;
 import org.bhave.network.impl.hash.HashNetwork;
+import org.bhave.network.impl.hash.dynamic.DynamicHashNetwork;
 
 import com.google.inject.AbstractModule;
 
@@ -61,6 +63,7 @@ public class NetworkModule extends AbstractModule {
 	protected void configure() {
 		bind(Network.class).to(HashNetwork.class); // HashNetwork is an
 													// implementation of Network
+		bind(DynamicNetwork.class).to(DynamicHashNetwork.class);
 	}
 
 }

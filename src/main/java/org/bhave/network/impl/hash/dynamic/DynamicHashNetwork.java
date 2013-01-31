@@ -1,19 +1,20 @@
 package org.bhave.network.impl.hash.dynamic;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.bhave.network.api.DynamicNetwork;
 import org.bhave.network.api.Link;
 import org.bhave.network.api.Network;
 import org.bhave.network.api.Node;
+import org.bhave.network.impl.hash.HashNetwork;
+import org.bhave.network.impl.hash.SimpleLink;
+import org.bhave.network.impl.hash.SimpleNode;
 
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 
 /**
  * Implementation of {@link DynamicNetwork dynamic network}. This is a simple
@@ -29,201 +30,236 @@ import com.google.inject.Injector;
  */
 public class DynamicHashNetwork implements DynamicNetwork {
 
-	private Injector injector = Guice.createInjector(new Module());
 	private int currentTime;
-	private Map<Integer, Network> networks; // map time intant t to a network
+	private NavigableMap<Integer, HashNetwork> networks; // map time instant to
+															// a network
 
-	
-	
+	/**
+	 * Constructor
+	 * 
+	 * Starts with a dynamic network with an initial time instant of 0, this
+	 * represents an initial state of the network. If you don't use a @{link
+	 * {@link DynamicNetwork#setCurrentTime(int) setTime} operation, this network works
+	 * exactly like a normal network would.
+	 */
+	@Inject
 	public DynamicHashNetwork() {
-		networks = new HashMap<>();
+		networks = new TreeMap<>();
 		currentTime = 0;
-		
-		//initial network (moment 0)
-		@Inject Network network;
-		
+
+		// initial network (moment 0)
+		HashNetwork initNetwork = new HashNetwork();
+		networks.put(currentTime, initNetwork);
+
 	}
 
-	
-	
 	@Override
 	public boolean addNode(Node node) {
-		// TODO Auto-generated method stub
-		return false;
+		Network network = networks.get(currentTime);
+
+		// create a safe copy
+
+		// we assume nodes are created by HashNetwork
+		// so we also use simple link
+		Node nodeCopy = new SimpleNode((SimpleNode) node);
+
+		return network.addNode(nodeCopy);
 	}
 
 	@Override
 	public Link addLink(Node node1, Node node2) {
-		// TODO Auto-generated method stub
-		return null;
+		Network network = networks.get(currentTime);
+
+		return network.addLink(node1, node2);
 	}
 
 	@Override
 	public boolean addLink(Node node1, Node node2, Link link) {
-		// TODO Auto-generated method stub
-		return false;
+		Network network = networks.get(currentTime);
+
+		// create a safe copy
+
+		// we assume nodes are created by this class so we also use simple link
+		Link linkCopy = new SimpleLink((SimpleLink) link);
+
+		return network.addLink(node1, node2, linkCopy);
 	}
 
 	@Override
 	public boolean removeNode(Node node) {
-		// TODO Auto-generated method stub
-		return false;
+		Network network = networks.get(currentTime);
+		return network.removeNode(node);
 	}
 
 	@Override
 	public boolean removeNode(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		Network network = networks.get(currentTime);
+		return network.removeLink(id);
 	}
 
 	@Override
 	public boolean removeLink(Link link) {
-		// TODO Auto-generated method stub
-		return false;
+		Network network = networks.get(currentTime);
+		return network.removeLink(link);
 	}
 
 	@Override
 	public boolean removeLink(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		Network network = networks.get(currentTime);
+		return network.removeLink(id);
 	}
 
 	@Override
 	public Node getNode(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		Network network = networks.get(currentTime);
+		return network.getNode(id);
 	}
 
 	@Override
 	public Link getLink(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		Network network = networks.get(currentTime);
+		return network.getLink(id);
 	}
 
 	@Override
 	public Link getLink(Node node1, Node node2) {
-		// TODO Auto-generated method stub
-		return null;
+		Network network = networks.get(currentTime);
+		return network.getLink(node1, node2);
 	}
 
 	@Override
 	public Collection<? extends Link> getLinks(Node node) {
-		// TODO Auto-generated method stub
-		return null;
+		Network network = networks.get(currentTime);
+		return network.getLinks(node);
 	}
 
 	@Override
 	public Collection<? extends Link> getOutLinks(Node node) {
-		// TODO Auto-generated method stub
-		return null;
+		Network network = networks.get(currentTime);
+		return network.getOutLinks(node);
 	}
 
 	@Override
 	public Collection<? extends Link> getInLinks(Node node) {
-		// TODO Auto-generated method stub
-		return null;
+		Network network = networks.get(currentTime);
+		return network.getInLinks(node);
 	}
 
 	@Override
 	public Collection<? extends Node> getSuccessors(Node node) {
-		// TODO Auto-generated method stub
-		return null;
+		Network network = networks.get(currentTime);
+		return network.getSuccessors(node);
 	}
 
 	@Override
 	public Collection<? extends Node> getPredecessors(Node node) {
-		// TODO Auto-generated method stub
-		return null;
+		Network network = networks.get(currentTime);
+		return network.getPredecessors(node);
 	}
 
 	@Override
 	public Collection<? extends Node> getNeighbours(Node node) {
-		// TODO Auto-generated method stub
-		return null;
+		Network network = networks.get(currentTime);
+		return network.getNeighbours(node);
 	}
 
 	@Override
 	public Collection<? extends Node> getNeighbours(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		Network network = networks.get(currentTime);
+		return network.getNeighbours(id);
 	}
 
 	@Override
 	public Collection<? extends Node> getNodes() {
-		// TODO Auto-generated method stub
-		return null;
+		Network network = networks.get(currentTime);
+		return network.getNodes();
 	}
 
 	@Override
 	public Collection<? extends Link> getLinks() {
-		// TODO Auto-generated method stub
-		return null;
+		Network network = networks.get(currentTime);
+		return network.getLinks();
 	}
 
 	@Override
 	public Pair<Node, Node> getNodes(int linkID) {
-		// TODO Auto-generated method stub
-		return null;
+		Network network = networks.get(currentTime);
+		return network.getNodes(linkID);
 	}
 
 	@Override
 	public Pair<Node, Node> getNodes(Link link) {
-		// TODO Auto-generated method stub
-		return null;
+		Network network = networks.get(currentTime);
+		return network.getNodes(link);
 	}
 
 	@Override
 	public int getNodeCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return networks.get(currentTime).getNodeCount();
 	}
 
 	@Override
 	public int getLinkCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return networks.get(currentTime).getNodeCount();
 	}
 
 	@Override
 	public boolean containsNode(Node node) {
-		// TODO Auto-generated method stub
-		return false;
+		return networks.get(currentTime).containsNode(node);
 	}
 
 	@Override
 	public boolean containsLink(Link link) {
-		// TODO Auto-generated method stub
-		return false;
+		return networks.get(currentTime).containsLink(link);
 	}
 
 	@Override
 	public Node createNode() {
-		// TODO Auto-generated method stub
-		return null;
+		return networks.get(currentTime).createNode();
 	}
 
 	@Override
 	public Link createLink() {
-		// TODO Auto-generated method stub
-		return null;
+		return networks.get(currentTime).createLink();
+	}
+
+	/**
+	 * Changes the current time instant of this dynamic network. What this means
+	 * is that if there is not a network structure associated
+	 */
+	@Override
+	public void setCurrentTime(int t) {
+		if (t >= 0) {
+			int previousTime = networks.floorKey(t);
+			if (!networks.containsKey(t)) {
+				HashNetwork newNetwork = new HashNetwork(
+						networks.get(previousTime));
+				networks.put(t, newNetwork);
+			}
+			currentTime = t;
+		}
 	}
 
 	@Override
-	public void setTime(int t) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public int getTime() {
-		// TODO Auto-generated method stub
-		return 0;
+	public int getCurrentTime() {
+		return currentTime;
 	}
 
 	@Override
 	public Set<? extends Integer> getTimeInstances() {
-		// TODO Auto-generated method stub
-		return null;
+		return networks.keySet();
+	}
+
+	@Override
+	public int getLastTime() {
+		
+		return networks.lastKey();
+	}
+
+	@Override
+	public int getFirstTime() {
+		
+		return networks.firstKey();
 	}
 
 }

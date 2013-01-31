@@ -31,11 +31,11 @@ import org.bhave.network.NetworkModule;
 import org.bhave.network.api.Link;
 import org.bhave.network.api.Network;
 import org.bhave.network.api.Node;
+import org.bhave.network.impl.hash.HashNetwork;
 import org.junit.Test;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-
 
 public class HashNetworkTest {
 	private final Injector injector = Guice.createInjector(new NetworkModule());
@@ -43,7 +43,6 @@ public class HashNetworkTest {
 	@Test
 	public void createEmptyNetwork() {
 		// System.out.println("Test createEmptyNetwork:");
-
 
 		Network network = injector.getInstance(Network.class);
 		assertNotNull(network);
@@ -168,14 +167,50 @@ public class HashNetworkTest {
 
 		network.addNode(node1);
 		network.addNode(node2);
-		
+
 		network.addLink(node1, node2);
-		
+
 		Collection<? extends Node> neighbours = network.getNeighbours(node1);
 		assertFalse(neighbours.isEmpty());
 		assertEquals(1, neighbours.size());
-		
+
 		assertEquals(node2, neighbours.iterator().next());
+
+	}
+
+	@Test
+	public void testCopyConstructor() {
+		HashNetwork network = new HashNetwork();
+		Node node1 = network.createNode();
+		Node node2 = network.createNode();
+		Link link1 = network.createLink();
+		
+		network.addNode(node1);
+		network.addNode(node2);
+		
+		network.addLink(node1, node2, link1);
+		
+		assertEquals(1, network.getLinkCount());
+		assertEquals(2, network.getNodeCount());
+		
+		HashNetwork networkCopy = new HashNetwork(network);
+		
+		assertNotNull(networkCopy);
+		assertEquals(1, networkCopy.getLinkCount());
+		assertEquals(2, networkCopy.getNodeCount());
+		assertTrue(networkCopy.containsNode(node1));
+		
+		assertNotSame(networkCopy.getNode(node1.getID()), network.getNode(node1.getID()));
+		
+		Node node3 = networkCopy.createNode();
+		networkCopy.addNode(node3);
+		
+		assertEquals(3, networkCopy.getNodeCount());
+		assertEquals(2, network.getNodeCount());
+		
+		
+		
+		
 
 	}
 
