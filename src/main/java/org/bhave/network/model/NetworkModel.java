@@ -1,4 +1,5 @@
 /**
+<<<<<<< HEAD
  * 
  * Copyright 2013 Davide Nunes
  * Authors : Davide Nunes <davex.pt@gmail.com>
