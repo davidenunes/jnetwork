@@ -32,6 +32,7 @@ import org.bhave.network.api.Network;
 import org.bhave.network.impl.hash.HashNetwork;
 import org.bhave.network.impl.hash.dynamic.DynamicHashNetwork;
 import org.bhave.network.model.BarabasiAlbertModel;
+import org.bhave.network.model.impl.CopyOfEBarabasiAlbertModel;
 import org.bhave.network.model.impl.DefaultBarabasiAlbertModel;
 import org.bhave.network.model.impl.EBarabasiAlbertModel;
 
@@ -74,7 +75,7 @@ public class NetworkModule extends AbstractModule {
 		
 		//NetworkModel API
 		bind(Configuration.class).to(PropertiesConfiguration.class);
-		bind(BarabasiAlbertModel.class).to(EBarabasiAlbertModel.class);
+		bind(BarabasiAlbertModel.class).to(CopyOfEBarabasiAlbertModel.class);
 		bind(RandomGenerator.class).to(MersenneTwister.class);
 		
 	}

@@ -1,15 +1,34 @@
+/**
+ * 
+ * Copyright 2013 Davide Nunes
+ * Authors : Davide Nunes <davex.pt@gmail.com>
+ * Website : http://davidenunes.com 
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ *
+ * This file is part of network-api.
+ *
+ * network-api is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * The network-api is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with network-api.  
+ * If not, see <http://www.gnu.org/licenses/gpl.html>.
+ */
 package org.bhave.test.network.model.impl;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.bhave.network.NetworkModule;
-import org.bhave.network.api.Link;
 import org.bhave.network.api.Network;
 import org.bhave.network.api.Node;
 import org.bhave.network.model.BarabasiAlbertModel;
@@ -69,37 +88,29 @@ public class BarabasiAlbertModelTest {
 
 	@Test
 	public void generateTest() throws ConfigurationException {
-		int numNodes = 2000;
+		int numNodes = 1000;
 
 		BarabasiAlbertModel model = injector
 				.getInstance(BarabasiAlbertModel.class);
 		Configuration config = model.getConfiguration();
 		config.setProperty("numNodes", numNodes);
-		config.setProperty("d", 1);
+		config.setProperty("d", 5);
 		config.setProperty("seed", 0);
 
 		model.configure(config);
 
 		Network network = model.generate();
+		assertNotNull(network);
 
-
-		for(Link link : network.getLinks()){
-			System.out.println(network.getNodes(link));
-		}
-
-		List<Integer> degList = new ArrayList<Integer>();
+		int sumDeg = 0;
 		for (Node node : network.getNodes()) {
-			degList.add(network.getNeighbours(node).size());
+			int d = network.getNeighbours(node).size();
+			System.out.print(d+" ");
+			sumDeg += d;
 		}
+		System.out.println();
 
-		Collections.sort(degList);
-
-		int sum = 0;
-		for (Integer d : degList) {
-			sum += d;
-		}
-
-		assertEquals(sum, network.getLinkCount()*2);
+		assertEquals(network.getLinkCount() * 2, sumDeg);
 
 	}
 

@@ -37,7 +37,11 @@ import org.bhave.network.model.BarabasiAlbertModel;
 import com.google.inject.Inject;
 
 /**
- * Implementation for the {@link BarabasiAlbertModel} interface.
+ * Naive Default Implementation for the {@link BarabasiAlbertModel} interface.
+ * This implementation recomputes a cumulative distribution to select nodes
+ * according to the preferential attachment mechanism which is highly
+ * inefficient. Although it is the most common implementation among existing
+ * libraries.
  * 
  * @author Davide Nunes
  * 
@@ -152,7 +156,6 @@ public class DefaultBarabasiAlbertModel implements BarabasiAlbertModel {
 	public void configure(int numNodes, int d, long seed)
 			throws ConfigurationException {
 		config.setProperty(NUM_NODES_PARAM, numNodes);
-		config.setProperty(MINIMUM_DEGREE_PARAM, d);
 		config.setProperty(SEED_PARAM, seed);
 		this.configure(config);
 	}
@@ -166,9 +169,8 @@ public class DefaultBarabasiAlbertModel implements BarabasiAlbertModel {
 	public void configure(Configuration configuration)
 			throws ConfigurationException {
 		int numNodes = configuration.getInt(NUM_NODES_PARAM);
-		int d = configuration.getInt(MINIMUM_DEGREE_PARAM);
 
-		if (numNodes < 2 || d < 1) {
+		if (numNodes < 2) {
 			throw new ConfigurationException("numNodes must be >= 2");
 		}
 

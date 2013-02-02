@@ -25,6 +25,8 @@
 package org.bhave.network.model.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -36,14 +38,15 @@ import org.bhave.network.model.BarabasiAlbertModel;
 import com.google.inject.Inject;
 
 /**
- * Efficient implementation of Preferential Attachement for the
+ * Efficient implementation of Preferential Attachment for the
  * {@link BarabasiAlbertModel}.
  * 
  * @author Davide Nunes
  * 
  */
-public class EBarabasiAlbertModel implements BarabasiAlbertModel {
+public class CopyOfEBarabasiAlbertModel implements BarabasiAlbertModel {
 	private static final String NUM_NODES_PARAM = "numNodes";
+	private static final String MIN_DEGREE_PARAM = "d";
 	private static final String SEED_PARAM = "seed";
 
 	// get a default configuration instance the NetworkModule
@@ -52,14 +55,15 @@ public class EBarabasiAlbertModel implements BarabasiAlbertModel {
 	private final Network network;
 
 	@Inject
-	public EBarabasiAlbertModel(Configuration config, RandomGenerator random,
-			Network network) {
+	public CopyOfEBarabasiAlbertModel(Configuration config,
+			RandomGenerator random, Network network) {
 		this.config = config;
 		this.random = random;
 		this.network = network;
 
 		// setup a default configuration
 		this.config.setProperty(NUM_NODES_PARAM, 2);
+		this.config.setProperty(MIN_DEGREE_PARAM, 1);
 		this.config.setProperty(SEED_PARAM, System.currentTimeMillis());
 	}
 
@@ -67,39 +71,86 @@ public class EBarabasiAlbertModel implements BarabasiAlbertModel {
 	public Network generate() {
 		// get configuration values
 		int n = config.getInt(NUM_NODES_PARAM);
-
-		// pool representing the links
-		int[] linkPool = new int[2 * (n - 1)];
-
-		// seed network with 1 connection
-		linkPool[0] = 0;
-		linkPool[1] = 1;
-
-		int numLinks = 1;
-
-		for (int v = 2; v < n; v++) {
-			int index = 2 * numLinks;
-
-			linkPool[index] = v;
-			int r = random.nextInt(index);
-			linkPool[index + 1] = linkPool[r];
-			numLinks++;
-		}
+		int d = config.getInt(MIN_DEGREE_PARAM);
 
 		// create nodes
 		for (int v = 0; v < n; v++) {
 			network.addNode(network.createNode());
 		}
+		// this can be shuffled
 		ArrayList<Node> nodes = new ArrayList<>(network.getNodes());
 
-		// add links
-		for (int i = 0; i < linkPool.length; i += 2) {
-			Node node1 = nodes.get(linkPool[i]);
-			Node node2 = nodes.get(linkPool[i + 1]);
-			network.addLink(node1, node2);
-		}
+		// pool for node scores
+		int[] scores = new int[n];
+		int numLinks = 0;
 
+		// add 2 nodes
+		network.addLink(nodes.get(0), nodes.get(1));
+		scores[0] = 1;
+		scores[1] = 1;
+		numLinks = 1;
+
+		// add the rest of the nodes
+		for (int v = 2; v < n; v++) {
+
+			// current nodes involved
+			HashSet<Integer> current = new HashSet<>();
+
+			int maxLimit = numLinks * 2;
+			int i = 0;
+			// add d nodes
+			for (i = 0; i < d && i < v; i++) {
+				int tempMaxLimit = maxLimit;
+				for (Integer e : current) {
+					tempMaxLimit -= scores[e];
+				}
+				int r = random.nextInt(tempMaxLimit);
+
+				int p = prefferentialAttachment(scores, r, tempMaxLimit,
+						current);
+				network.addLink(nodes.get(v), nodes.get(p));
+				numLinks++;
+				current.add(p);
+			}
+			scores[v] += i;
+			for (Integer e : current) {
+				scores[e]++;
+			}
+
+		}
 		return network;
+	}
+
+	/**
+	 * Select Partner according to a cumulative distribution of the node scores
+	 * 
+	 * @param scores
+	 *            node degree scores
+	 * @param r
+	 *            a random number uniformly selected between 0 and the sum of
+	 *            all node degrees
+	 * @param maxScore
+	 * 			  
+	 * @param exclude
+	 * @return
+	 */
+	private int prefferentialAttachment(int[] scores, int r, int maxScore,
+			Set<Integer> exclude) {
+
+		int currentScore = 0;
+		int i = 0;
+		do {
+			// skip excluded
+			if (!exclude.contains(i)) {
+				currentScore += scores[i];
+				if (r < currentScore) {
+					return i;
+				}
+			}
+			i++;
+		} while (currentScore < maxScore);
+
+		return -1;
 	}
 
 	@Override
@@ -119,9 +170,10 @@ public class EBarabasiAlbertModel implements BarabasiAlbertModel {
 	public void configure(Configuration configuration)
 			throws ConfigurationException {
 		int numNodes = configuration.getInt(NUM_NODES_PARAM);
+		int d = configuration.getInt(MIN_DEGREE_PARAM);
 
-		if (numNodes < 2) {
-			throw new ConfigurationException("numNodes must be >= 2");
+		if (numNodes < 2 || d < 1) {
+			throw new ConfigurationException("numNodes must be >= 2 && d >= 1");
 		}
 
 		// configure random number generator

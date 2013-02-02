@@ -44,8 +44,6 @@ import org.apache.commons.configuration.ConfigurationException;
  * <h3>Model Parameters</h3> <b>numNodes</b> - number of nodes to be added to
  * the network <br>
  * 
- * <b>d</b> - the minimum degree of each node added during the network growth<br>
- * 
  * <b>seed</b> - The seed to be used with the random number generator of this
  * network model </p>
  * 
@@ -64,9 +62,6 @@ public interface BarabasiAlbertModel extends NetworkModel {
 	 * @param numNodes
 	 *            the number of nodes to be created in this model
 	 * 
-	 * @param d
-	 *            minimum degree for each new node added. Dictates how many
-	 *            links are added with preferential attachment, each iteration.
 	 * 
 	 * @param seed
 	 *            the random number generator seed to be used with this

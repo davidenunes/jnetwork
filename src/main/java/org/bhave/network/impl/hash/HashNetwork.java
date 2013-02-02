@@ -111,10 +111,6 @@ public class HashNetwork implements Network {
 			return null;
 		}
 
-		if (!containsNode(node1) || !containsNode(node2)) {
-			return null;
-		}
-
 		// create and add link object
 		SimpleLink link = createLink();
 		links.put(link.getID(), link);
