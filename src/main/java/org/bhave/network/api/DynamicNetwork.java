@@ -86,14 +86,14 @@ public interface DynamicNetwork extends Network {
 	 * @param t
 	 *            a discrete time with t >= 0
 	 */
-	public void setCurrentTime(int t);
+	void setCurrentTime(int t);
 
 	/**
 	 * Returns the current time instant in which you are working
 	 * 
 	 * @return t a discrete time
 	 */
-	public int getCurrentTime();
+	int getCurrentTime();
 
 	/**
 	 * Returns the last time instant of this network
@@ -101,7 +101,7 @@ public interface DynamicNetwork extends Network {
 	 * 
 	 * @return t a discrete time
 	 */
-	public int getLastTime();
+	int getLastTime();
 
 	/**
 	 * Returns the first time instant of this network
@@ -109,7 +109,7 @@ public interface DynamicNetwork extends Network {
 	 * 
 	 * @return t a discrete time
 	 */
-	public int getFirstTime();
+	int getFirstTime();
 
 	/**
 	 * Returns the set of time instances for which there are events of node /
@@ -125,5 +125,5 @@ public interface DynamicNetwork extends Network {
 	 * 
 	 * @return a set of time instances
 	 */
-	public Set<? extends Integer> getTimeInstances();
+	Set<? extends Integer> getTimeInstances();
 }

@@ -62,8 +62,8 @@ public class DynamicHashNetwork implements DynamicNetwork {
 	 * 
 	 * Starts with a dynamic network with an initial time instant of 0, this
 	 * represents an initial state of the network. If you don't use a @{link
-	 * {@link DynamicNetwork#setCurrentTime(int) setTime} operation, this network works
-	 * exactly like a normal network would.
+	 * {@link DynamicNetwork#setCurrentTime(int) setTime} operation, this
+	 * network works exactly like a normal network would.
 	 */
 	@Inject
 	public DynamicHashNetwork() {
@@ -246,6 +246,16 @@ public class DynamicHashNetwork implements DynamicNetwork {
 		return networks.get(currentTime).createLink();
 	}
 
+	@Override
+	public boolean containsLink(Node node1, Node node2) {
+		return networks.get(currentTime).containsLink(node1, node2);
+	}
+
+	@Override
+	public boolean containsDirectedLink(Node node1, Node node2) {
+		return networks.get(currentTime).containsDirectedLink(node1, node2);
+	}
+
 	/**
 	 * Changes the current time instant of this dynamic network. What this means
 	 * is that if there is not a network structure associated
@@ -275,13 +285,13 @@ public class DynamicHashNetwork implements DynamicNetwork {
 
 	@Override
 	public int getLastTime() {
-		
+
 		return networks.lastKey();
 	}
 
 	@Override
 	public int getFirstTime() {
-		
+
 		return networks.firstKey();
 	}
 

@@ -72,7 +72,7 @@ import org.bhave.network.NetworkModule;
  * 
  * @author Davide Nunes
  */
-public interface Network{
+public interface Network {
 
 	/**
 	 * Adds a node to the network. Fails if the node already exists or if the
@@ -373,6 +373,34 @@ public interface Network{
 	boolean containsLink(Link link);
 
 	/**
+	 * Returns true of the given link is in the network. False otherwise or if
+	 * the link is null.
+	 * 
+	 * @param node1
+	 *            one of the nodes for the link
+	 * @param node2
+	 *            one of the nodes for the link
+	 * 
+	 * @return true if the link is in the network, false if the link is not in
+	 *         the network or if it is null.
+	 */
+	boolean containsLink(Node node1, Node node2);
+	
+	/**
+	 * Returns true of the given link is in the network. False otherwise or if
+	 * the link is null.
+	 * 
+	 * @param node1
+	 *            one of the nodes for the link
+	 * @param node2
+	 *            one of the nodes for the link
+	 * 
+	 * @return true if the link is in the network, false if the link is not in
+	 *         the network or if it is null.
+	 */
+	boolean containsDirectedLink(Node node1, Node node2);
+
+	/**
 	 * Creates a new node that can be added to the network.
 	 * 
 	 * @return a node
@@ -387,5 +415,5 @@ public interface Network{
 	 * @see Link
 	 */
 	Link createLink();
-	
+
 }

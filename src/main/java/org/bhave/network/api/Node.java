@@ -35,10 +35,34 @@ package org.bhave.network.api;
  */
 public interface Node {
 
+	/**
+	 * Returns the Integer ID of this Node. This is the component used to
+	 * compare nodes in a network.
+	 * 
+	 * @return an integer id
+	 */
 	public int getID();
 
+	/**
+	 * Adds or sets a property to this node. The given key should be the
+	 * property name. The given value should be its value.
+	 * 
+	 * @param key
+	 *            a String representation of the name of the property
+	 * @param value
+	 *            a String representation of the property value
+	 */
 	public void setProperty(String key, String value);
 
+	/**
+	 * Returns the value of the property with the name given by the given key,
+	 * or null if no property with this name exists.
+	 * 
+	 * @param key
+	 *            a property name
+	 * 
+	 * @return the property value.
+	 */
 	public String getProperty(String key);
 
 }

@@ -77,7 +77,7 @@ public class SimpleLink implements Link {
 
 	@Override
 	public String toString() {
-		return "SimpleLink [id=" + id + "]";
+		return "Link [id=" + id + "]";
 	}
 
 	@Override

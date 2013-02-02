@@ -23,10 +23,17 @@
  */
 package org.bhave.network;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.math3.random.MersenneTwister;
+import org.apache.commons.math3.random.RandomGenerator;
 import org.bhave.network.api.DynamicNetwork;
 import org.bhave.network.api.Network;
 import org.bhave.network.impl.hash.HashNetwork;
 import org.bhave.network.impl.hash.dynamic.DynamicHashNetwork;
+import org.bhave.network.model.BarabasiAlbertModel;
+import org.bhave.network.model.impl.DefaultBarabasiAlbertModel;
+import org.bhave.network.model.impl.EBarabasiAlbertModel;
 
 import com.google.inject.AbstractModule;
 
@@ -61,9 +68,15 @@ public class NetworkModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		bind(Network.class).to(HashNetwork.class); // HashNetwork is an
-													// implementation of Network
+		//Network API
+		bind(Network.class).to(HashNetwork.class); 
 		bind(DynamicNetwork.class).to(DynamicHashNetwork.class);
+		
+		//NetworkModel API
+		bind(Configuration.class).to(PropertiesConfiguration.class);
+		bind(BarabasiAlbertModel.class).to(EBarabasiAlbertModel.class);
+		bind(RandomGenerator.class).to(MersenneTwister.class);
+		
 	}
 
 }

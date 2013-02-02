@@ -26,6 +26,7 @@ package org.bhave.network.impl.hash;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import org.apache.commons.collections.keyvalue.MultiKey;
 import org.apache.commons.collections.map.MultiKeyMap;
@@ -43,14 +44,16 @@ import com.google.inject.Inject;
  * @see Network
  */
 public class HashNetwork implements Network {
-	private HashMap<Integer, Node> nodes; // the nodes in the network
-	private HashMap<Integer, Link> links; // the links in the network
+	// the nodes in the network
+	private Map<Integer, Node> nodes;
+	// the links in the network
+	private Map<Integer, Link> links;
 
-	private MultiKeyMap nl; // map the nodes to links
-	private HashMap<Link, Pair<Node, Node>> ln; // map
-												// links
-												// to
-												// nodes
+	// directed map the nodes to links
+	private MultiKeyMap nl;
+
+	// map links to nodes
+	private Map<Link, Pair<Node, Node>> ln;
 
 	/**
 	 * Constructor. Initialises all the sets of nodes, links and all the other
@@ -69,7 +72,7 @@ public class HashNetwork implements Network {
 	public HashNetwork(HashNetwork network) {
 		this();
 
-		// copy nodes 
+		// copy nodes
 		for (Integer key : network.nodes.keySet()) {
 			SimpleNode newNode = new SimpleNode(
 					(SimpleNode) network.nodes.get(key));
@@ -84,11 +87,11 @@ public class HashNetwork implements Network {
 
 			Node node1 = (Node) nodeKey.getKey(0);
 			Node node2 = (Node) nodeKey.getKey(1);
-			
-			//add new link
+
+			// add new link
 			this.addLink(node1, node2, newLink);
 		}
-		
+
 		this.nextNodeID = network.nextNodeID;
 		this.nextLinkID = network.nextLinkID;
 
@@ -104,9 +107,13 @@ public class HashNetwork implements Network {
 
 	@Override
 	public SimpleLink addLink(Node node1, Node node2) {
-		if (node1 == null || node2 == null
-				|| !(containsNode(node1) && containsNode(node2)))
+		if (node1 == null || node2 == null) {
 			return null;
+		}
+
+		if (!containsNode(node1) || !containsNode(node2)) {
+			return null;
+		}
 
 		// create and add link object
 		SimpleLink link = createLink();
@@ -170,8 +177,8 @@ public class HashNetwork implements Network {
 		if (link == null || !containsLink(link))
 			return false;
 
-		Pair<Node, Node> nodes = ln.get(link);
-		removeNodeToLinkMap(nodes.getLeft(), nodes.getRight(), link);
+		Pair<Node, Node> linkedNodes = ln.get(link);
+		removeNodeToLinkMap(linkedNodes.getLeft(), linkedNodes.getRight(), link);
 		links.remove(link.getID());
 		return true;
 	}
@@ -367,6 +374,26 @@ public class HashNetwork implements Network {
 			result.add(links.get(key));
 
 		return result;
+	}
+
+	@Override
+	public boolean containsLink(Node node1, Node node2) {
+		if (node1 == null || node2 == null) {
+			return false;
+		}
+		MultiKey k1 = new MultiKey(node1, node2);
+		MultiKey k2 = new MultiKey(node2, node1);
+
+		return nl.containsKey(k1) || nl.containsKey(k2);
+	}
+
+	@Override
+	public boolean containsDirectedLink(Node node1, Node node2) {
+		if (node1 == null || node2 == null) {
+			return false;
+		}
+		MultiKey k1 = new MultiKey(node1, node2);
+		return nl.containsKey(k1);
 	}
 
 }

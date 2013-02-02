@@ -1,5 +1,4 @@
 /**
-<<<<<<< HEAD
  * 
  * Copyright 2013 Davide Nunes
  * Authors : Davide Nunes <davex.pt@gmail.com>
@@ -26,8 +25,8 @@
 
 package org.bhave.network.model;
 
-import java.util.Properties;
-
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
 import org.bhave.network.api.Network;
 
 /**
@@ -48,18 +47,80 @@ import org.bhave.network.api.Network;
  * Social networks. </b>
  * 
  * <h2>Network Model Configuration</h2>
- * <p>A <code>NetworkModel</code> should provide a way to configure the network 
- * generative procedure using the method {@link NetworkModel#configure(Properties)}.
- * The specific details of each configuration should be 
+ * <p>
+ * A <code>NetworkModel</code> should provide a way to configure the network
+ * generative procedure using the method
+ * {@link NetworkModel#configure(Configuration)}. The specific details of each
+ * configuration (such as parameter names) should be included within each
+ * network model.
+ * <p>
  * 
+ * The network models are configured using {@link Configuration} objects. These
+ * should be provided by the network model implementations using the
+ * {@link NetworkModel#getConfiguration()} method.
+ * 
+ * If you use the general configure method from the {@link NetworkModel}
+ * interface, you could setup a model as follows:
+ * 
+ * <br>
+ * <br>
+ * <code>
+ * Configuration config = model.getConfiguration();<br>
+ * config.setProperty("numNodes", 1000);<br>
+ * config.setProperty("numLinks", 2);<br><br>
+ * 
+ * model.configure(config);
+ * </code> <br>
  * 
  * 
  * @author Davide Nunes
  * 
  */
 public interface NetworkModel {
-	
-	public void configure(Properties parameters);
+	/**
+	 * <p>
+	 * Returns a configuration object which can be used to set parameter values
+	 * for the network model. After getting a configuration object and setting
+	 * the appropriate values, one can configure the model with the method
+	 * {@link NetworkModel#configure(Configuration)}.
+	 * </p>
+	 * 
+	 * @return a configuration instance which should have preferably default
+	 *         values for the necessary parameters.
+	 * 
+	 */
+	Configuration getConfiguration();
 
-	public Network generate();
+	/**
+	 * <p>
+	 * Configures the {@link NetworkModel} with a given {@link Configuration}
+	 * instance. Note that the configuration objects should be provided by each
+	 * network model instance and accessed using @
+	 * NetworkModel#getConfiguration()}.
+	 * </p>
+	 * 
+	 * @param configuration
+	 *            a configuration with the appropriate parameters for the
+	 *            network model to run.
+	 * 
+	 * @throws ConfigurationException
+	 *             an exception that should be thrown if the passed
+	 *             configuration contains an invalid configuration (missing
+	 *             parameters or invalid parameter values)
+	 */
+	void configure(Configuration configuration)
+			throws ConfigurationException;
+
+	/**
+	 * Generates a {@link Network} instance. Note that this method should only
+	 * be called after the {@link NetworkModel} is configured properly.
+	 * 
+	 * To correctly configure a model, you should refer to the documentation of
+	 * each model. The various models should supply enough information in their
+	 * documentation about what kind of parameters are expected and the valid
+	 * values for each parameter.
+	 * 
+	 * @return network a network instance
+	 */
+	Network generate();
 }

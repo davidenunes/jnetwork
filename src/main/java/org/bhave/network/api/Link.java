@@ -47,14 +47,52 @@ package org.bhave.network.api;
  */
 public interface Link {
 
+	/**
+	 * Returns the Integer ID of this Link. This is the component used to
+	 * compare links in a network.
+	 * 
+	 * @return an integer id
+	 */
 	public int getID();
 
+	/**
+	 * Returns a double value associated with the link. This is here for
+	 * convenience. Typically this represents a distances in a networks for
+	 * example.
+	 * 
+	 * @return value a double value associated with a distance between nodes
+	 */
 	public double getValue();
 
+	/**
+	 * Sets the value for this links "distance" value. This value can latter be
+	 * accessed through {@link Link#getValue()}.
+	 * 
+	 * @param value
+	 *            a value to be set for this link.
+	 */
 	public void setValue(double value);
 
+	/**
+	 * Adds or sets a property to this link. The given key should be the
+	 * property name. The given value should be its value.
+	 * 
+	 * @param key
+	 *            a String representation of the name of the property
+	 * @param value
+	 *            a String representation of the property value
+	 */
 	public void setProperty(String key, String value);
 
+	/**
+	 * Returns the value of the property with the name given by the given key,
+	 * or null if no property with this name exists.
+	 * 
+	 * @param key
+	 *            a property name
+	 * 
+	 * @return the property value.
+	 */
 	public String getProperty(String key);
 
 }
