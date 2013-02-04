@@ -36,6 +36,7 @@ import org.bhave.network.api.Node;
 import org.bhave.network.model.BAModel;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 /**
  * Efficient implementation of Preferential Attachment for the
@@ -49,14 +50,15 @@ public class DefaultBAModel extends AbstractNetworkModel implements BAModel {
 	private static final String PARAM_MIN_DEG = "d";
 
 	@Inject
-	public DefaultBAModel(Configuration config, RandomGenerator random,
-			Network network) {
-		super(config, random, network);
+	public DefaultBAModel(Configuration config,
+			RandomGenerator random,
+			Provider<Network> networkProvider) {
+		super(config, random, networkProvider);
 
 	}
 
 	@Override
-	public Network generate() {
+	public void generateNetwork() {
 		// get configuration values
 		int n = config.getInt(PARAM_NUM_NODES);
 		int d = config.getInt(PARAM_MIN_DEG);
@@ -113,7 +115,6 @@ public class DefaultBAModel extends AbstractNetworkModel implements BAModel {
 			}
 
 		}
-		return network;
 	}
 
 	/**
@@ -172,9 +173,6 @@ public class DefaultBAModel extends AbstractNetworkModel implements BAModel {
 			throw new ConfigurationException(PARAM_NUM_NODES
 					+ " must be >= 2 && d >= 1");
 		}
-
-		// configure random number generator
-		random.setSeed(configuration.getLong(PARAM_SEED));
 	}
 
 	@Override

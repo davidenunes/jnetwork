@@ -29,30 +29,52 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.math3.random.RandomGenerator;
 import org.bhave.network.api.Network;
 import org.bhave.network.model.NetworkModel;
+import com.google.inject.Provider;
 
 /**
- * @author davide
+ * @author Davide Nunes
  * 
  */
 public abstract class AbstractNetworkModel implements NetworkModel {
 	protected static final String PARAM_SEED = "seed";
 
+	protected final Provider<Network> networkProvider;
+
 	// common to all network generator implementations
 	protected final Configuration config;
-	protected final RandomGenerator random;
-	protected final Network network;
+	protected RandomGenerator random;
+	protected Network network;
 
-	public AbstractNetworkModel(Configuration config, RandomGenerator random,
-			Network network) {
-		this.config = defaultConfiguration(config);
+	protected AbstractNetworkModel(Configuration config,
+			RandomGenerator random, Provider<Network> networkProvider) {
+
 		this.random = random;
-		this.network = network;
+		this.networkProvider = networkProvider;
 
-		
+		this.config = defaultConfiguration(config);
+	}
+
+	public Network generate() {
+		resetModel();
+
+		generateNetwork();
+
+		return network;
+	}
+
+	abstract void generateNetwork();
+
+	/**
+	 * Resets the model so it can be called again to produce a new network
+	 * instance
+	 */
+	protected void resetModel() {
+		this.random.setSeed(config.getLong(PARAM_SEED));
+		this.network = networkProvider.get();
 	}
 
 	abstract Configuration defaultConfiguration(Configuration config);
-	
+
 	@Override
 	public Configuration getConfiguration() {
 		return this.config;

@@ -34,11 +34,10 @@ import org.bhave.network.api.Node;
 import org.bhave.network.model.GilbertModel;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 /**
  * Efficient implementation of {@link GilbertModel}.
- * 
- * 
  * 
  * @author Davide Nunes
  * 
@@ -50,8 +49,8 @@ public class EGilberModel extends AbstractNetworkModel implements GilbertModel {
 
 	@Inject
 	public EGilberModel(Configuration config, RandomGenerator random,
-			Network network) {
-		super(config, random, network);
+			Provider<Network> networkProvider) {
+		super(config, random, networkProvider);
 	}
 
 	@Override
@@ -67,7 +66,6 @@ public class EGilberModel extends AbstractNetworkModel implements GilbertModel {
 			throws ConfigurationException {
 		int numNodes = config.getInt(PARAM_NUM_NODES);
 		double p = config.getDouble(PARA_ATTACH_P);
-		long seed = config.getLong(PARAM_SEED);
 
 		if (numNodes < 0) {
 			throw new ConfigurationException(PARAM_NUM_NODES + " must be >= 0");
@@ -77,11 +75,10 @@ public class EGilberModel extends AbstractNetworkModel implements GilbertModel {
 			throw new ConfigurationException(PARA_ATTACH_P
 					+ " must be within: 0 < p < 1");
 		}
-		random.setSeed(seed);
 	}
 
 	@Override
-	public Network generate() {
+	public void generateNetwork() {
 		int n = config.getInt(PARAM_NUM_NODES);
 		double p = config.getDouble(PARA_ATTACH_P);
 
@@ -105,8 +102,6 @@ public class EGilberModel extends AbstractNetworkModel implements GilbertModel {
 				network.addLink(nodes[v], nodes[w]);
 			}
 		}
-
-		return network;
 	}
 
 	@Override

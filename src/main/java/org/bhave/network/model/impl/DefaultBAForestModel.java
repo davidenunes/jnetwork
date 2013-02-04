@@ -33,6 +33,7 @@ import org.bhave.network.api.Node;
 import org.bhave.network.model.BAForestModel;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 /**
  * Efficient implementation of Preferential Attachment for the
@@ -46,9 +47,10 @@ public class DefaultBAForestModel extends AbstractNetworkModel implements
 	private static final String PARAM_NUM_NODES = "numNodes";
 
 	@Inject
-	public DefaultBAForestModel(Configuration config, RandomGenerator random,
-			Network network) {
-		super(config, random, network);
+	public DefaultBAForestModel(Configuration config,
+			RandomGenerator random,
+			Provider<Network> networkProvider) {
+		super(config, random, networkProvider);
 	}
 
 	/**
@@ -62,7 +64,8 @@ public class DefaultBAForestModel extends AbstractNetworkModel implements
 	}
 
 	@Override
-	public Network generate() {
+	public void generateNetwork() {
+		resetModel();
 		// get configuration values
 		int n = config.getInt(PARAM_NUM_NODES);
 
@@ -103,8 +106,6 @@ public class DefaultBAForestModel extends AbstractNetworkModel implements
 			Node node2 = nodes[perm[linkPool[i + 1]]];
 			network.addLink(node1, node2);
 		}
-
-		return network;
 	}
 
 	@Override
@@ -123,9 +124,6 @@ public class DefaultBAForestModel extends AbstractNetworkModel implements
 		if (numNodes < 2) {
 			throw new ConfigurationException("numNodes must be >= 2");
 		}
-
-		// configure random number generator
-		random.setSeed(configuration.getLong(PARAM_SEED));
 	}
 
 }

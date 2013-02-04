@@ -33,6 +33,7 @@ import org.bhave.network.api.Node;
 import org.bhave.network.model.KRegularModel;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 /**
  * Implementation of {@link KRegularModel}
@@ -45,9 +46,10 @@ public class DefaultKRegularModel extends AbstractNetworkModel implements
 	private static final String NUM_NODES_PARAM = "numNodes";
 
 	@Inject
-	public DefaultKRegularModel(Configuration config, RandomGenerator random,
-			Network network) {
-		super(config, random, network);
+	public DefaultKRegularModel(Configuration config,
+			RandomGenerator random,
+			Provider<Network> networkProvider) {
+		super(config, random, networkProvider);
 	}
 
 	@Override
@@ -64,21 +66,19 @@ public class DefaultKRegularModel extends AbstractNetworkModel implements
 
 		int numNodes = configuration.getInt(NUM_NODES_PARAM);
 		int k = configuration.getInt(K_PARAM);
-		long seed = configuration.getLong(PARAM_SEED);
 
 		if (numNodes < 0) {
 			throw new ConfigurationException(NUM_NODES_PARAM + " must be > 0");
 		}
-		
+
 		if (k < 1 || k > (numNodes / 2))
 			throw new ConfigurationException(K_PARAM
 					+ " must be within 1 <= k <= (" + NUM_NODES_PARAM + ") / 2");
 
-		random.setSeed(seed);
 	}
 
 	@Override
-	public Network generate() {
+	public void generateNetwork() {
 
 		int numNodes = config.getInt(NUM_NODES_PARAM);
 		int k = config.getInt(K_PARAM);
@@ -110,7 +110,6 @@ public class DefaultKRegularModel extends AbstractNetworkModel implements
 			}
 		}
 
-		return network;
 	}
 
 	@Override

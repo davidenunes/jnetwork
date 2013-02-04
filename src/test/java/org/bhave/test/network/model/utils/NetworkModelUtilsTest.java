@@ -24,19 +24,22 @@ public class NetworkModelUtilsTest {
 		long maxI = numNodes - 1;
 		
 		long ii = (maxI * (maxI + 1) / 2) - 1 - index;
-		System.out.println("ii: "+ii);
+		
 		double t = FastMath.sqrt(8 * ii + 1);
-		System.out.println("t: "+t);
+
 		long k = (long) FastMath.floor((t - 1) / 2);
-		System.out.println("k: "+k);
+
 		long row = maxI - 1 - k;
 
 		double column = ((index + (row * (row + 1) / 2)) % maxI);
 
 		int node1 = (int) row;
 		int node2 = (int) (column + 1);
+		
+		assertEquals(0, node1);
+		assertEquals(1, node2);
 
-		System.out.println("("+node1+", "+node2+")");
+
 		
 	}
 

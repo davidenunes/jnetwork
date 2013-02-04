@@ -20,9 +20,9 @@ public class ERGilbertComparisonTest {
 
 	@Test
 	public void compareTest() {
-		int numNodes = 10;
-		int numLinks = 5;
-		double p = 0.5;
+		int numNodes = 1000;
+		int numLinks = 500;
+		double p = numLinks / (numNodes * (numNodes-1) / 2.0);
 		
 		GilbertModel gilbert = injector.getInstance(GilbertModel.class);
 
@@ -51,6 +51,7 @@ public class ERGilbertComparisonTest {
 		}
 
 		Network erNetwork = er.generate();
+		
 		
 		System.out.println(gNetwork.getLinkCount());
 		System.out.println(erNetwork.getLinkCount());

@@ -10,6 +10,7 @@ import org.bhave.network.model.ERModel;
 import org.bhave.network.model.utils.NetworkModelUtils;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 /**
  * Efficient Implementation for the {@link ERModel}.
@@ -23,9 +24,10 @@ public class EERModel extends AbstractNetworkModel implements ERModel {
 	public static final String PARAM_NUM_LINKS = "numLinks";
 
 	@Inject
-	public EERModel(Configuration config, RandomGenerator random,
-			Network network) {
-		super(config, random, network);
+	public EERModel(Configuration config,
+			RandomGenerator random,
+			Provider<Network> networkProvider) {
+		super(config, random, networkProvider);
 	}
 
 	@Override
@@ -37,7 +39,7 @@ public class EERModel extends AbstractNetworkModel implements ERModel {
 	}
 
 	@Override
-	public Network generate() {
+	public void generateNetwork() {
 		int n = config.getInt(PARAM_NUM_NODES);
 		int m = config.getInt(PARAM_NUM_LINKS);
 
@@ -63,8 +65,7 @@ public class EERModel extends AbstractNetworkModel implements ERModel {
 
 			network.addLink(node1, node2);
 		}
-
-		return network;
+		// done
 	}
 
 	@Override
@@ -82,7 +83,7 @@ public class EERModel extends AbstractNetworkModel implements ERModel {
 			throws ConfigurationException {
 		int numNodes = config.getInt(PARAM_NUM_NODES);
 		int numLinks = config.getInt(PARAM_NUM_LINKS);
-		long seed = config.getLong(PARAM_SEED);
+
 		long maxNumLink = numNodes * (numNodes - 1) / 2;
 
 		if (numNodes < 0) {
@@ -94,6 +95,5 @@ public class EERModel extends AbstractNetworkModel implements ERModel {
 
 		}
 
-		random.setSeed(seed);
 	}
 }

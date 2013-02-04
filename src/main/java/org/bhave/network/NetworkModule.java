@@ -78,17 +78,19 @@ public class NetworkModule extends AbstractModule {
 	protected void configure() {
 		// Network API
 		bind(Network.class).to(HashNetwork.class);
+
 		bind(DynamicNetwork.class).to(DynamicHashNetwork.class);
 
 		// NetworkModel API
 		bind(Configuration.class).to(PropertiesConfiguration.class);
+
+		bind(RandomGenerator.class).to(MersenneTwister.class);
+
 		bind(BAModel.class).to(DefaultBAModel.class);
 		bind(BAForestModel.class).to(DefaultBAForestModel.class);
 		bind(KRegularModel.class).to(DefaultKRegularModel.class);
 		bind(ERModel.class).to(EERModel.class);
 		bind(GilbertModel.class).to(EGilberModel.class);
-		bind(RandomGenerator.class).to(MersenneTwister.class);
-
 	}
 
 }

@@ -33,7 +33,7 @@ public class KRegularTest {
 
 		Configuration config = model.getConfiguration();
 		config.setProperty("k", 10);
-		config.setProperty("numNodes", 1000);
+		config.setProperty("numNodes", 100);
 
 		try {
 			model.configure(config);
