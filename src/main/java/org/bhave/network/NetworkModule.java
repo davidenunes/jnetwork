@@ -31,10 +31,16 @@ import org.bhave.network.api.DynamicNetwork;
 import org.bhave.network.api.Network;
 import org.bhave.network.impl.hash.HashNetwork;
 import org.bhave.network.impl.hash.dynamic.DynamicHashNetwork;
-import org.bhave.network.model.BarabasiAlbertModel;
-import org.bhave.network.model.impl.CopyOfEBarabasiAlbertModel;
-import org.bhave.network.model.impl.DefaultBarabasiAlbertModel;
-import org.bhave.network.model.impl.EBarabasiAlbertModel;
+import org.bhave.network.model.BAForestModel;
+import org.bhave.network.model.BAModel;
+import org.bhave.network.model.ERModel;
+import org.bhave.network.model.GilbertModel;
+import org.bhave.network.model.KRegularModel;
+import org.bhave.network.model.impl.DefaultBAForestModel;
+import org.bhave.network.model.impl.DefaultBAModel;
+import org.bhave.network.model.impl.DefaultKRegularModel;
+import org.bhave.network.model.impl.EERModel;
+import org.bhave.network.model.impl.EGilberModel;
 
 import com.google.inject.AbstractModule;
 
@@ -52,13 +58,14 @@ import com.google.inject.AbstractModule;
  * network} instance without accessing specific implementations, we build our
  * GUICE injector from this module like so: <br />
  * <br />
- *
+ * 
  * <code>Injector injector = Guice.createInjector(new NetworkModule());</code>
  * 
  * </p>
  * 
  * <p>
- * From this point on you can get API objects like this: <br><br>
+ * From this point on you can get API objects like this: <br>
+ * <br>
  * <code>Network network = injector.getInstance(Network.class);</code>
  * </p>
  * 
@@ -69,15 +76,19 @@ public class NetworkModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		//Network API
-		bind(Network.class).to(HashNetwork.class); 
+		// Network API
+		bind(Network.class).to(HashNetwork.class);
 		bind(DynamicNetwork.class).to(DynamicHashNetwork.class);
-		
-		//NetworkModel API
+
+		// NetworkModel API
 		bind(Configuration.class).to(PropertiesConfiguration.class);
-		bind(BarabasiAlbertModel.class).to(CopyOfEBarabasiAlbertModel.class);
+		bind(BAModel.class).to(DefaultBAModel.class);
+		bind(BAForestModel.class).to(DefaultBAForestModel.class);
+		bind(KRegularModel.class).to(DefaultKRegularModel.class);
+		bind(ERModel.class).to(EERModel.class);
+		bind(GilbertModel.class).to(EGilberModel.class);
 		bind(RandomGenerator.class).to(MersenneTwister.class);
-		
+
 	}
 
 }

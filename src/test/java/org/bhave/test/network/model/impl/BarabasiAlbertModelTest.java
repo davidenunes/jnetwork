@@ -31,7 +31,7 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.bhave.network.NetworkModule;
 import org.bhave.network.api.Network;
 import org.bhave.network.api.Node;
-import org.bhave.network.model.BarabasiAlbertModel;
+import org.bhave.network.model.BAModel;
 import org.junit.Test;
 
 import com.google.inject.Guice;
@@ -41,11 +41,12 @@ public class BarabasiAlbertModelTest {
 
 	private static final Injector injector = Guice
 			.createInjector(new NetworkModule());
+	
 
 	@Test
 	public void defaultConfigurationTest() {
-		BarabasiAlbertModel model = injector
-				.getInstance(BarabasiAlbertModel.class);
+		BAModel model = injector
+				.getInstance(BAModel.class);
 		assertNotNull(model);
 
 		Network network = model.generate();
@@ -57,8 +58,8 @@ public class BarabasiAlbertModelTest {
 
 	@Test
 	public void configureTest() {
-		BarabasiAlbertModel model = injector
-				.getInstance(BarabasiAlbertModel.class);
+		BAModel model = injector
+				.getInstance(BAModel.class);
 		assertNotNull(model);
 
 		Configuration config = model.getConfiguration();
@@ -88,13 +89,13 @@ public class BarabasiAlbertModelTest {
 
 	@Test
 	public void generateTest() throws ConfigurationException {
-		int numNodes = 1000;
+		int numNodes = 100;
 
-		BarabasiAlbertModel model = injector
-				.getInstance(BarabasiAlbertModel.class);
+		BAModel model = injector
+				.getInstance(BAModel.class);
 		Configuration config = model.getConfiguration();
 		config.setProperty("numNodes", numNodes);
-		config.setProperty("d", 5);
+		config.setProperty("d", 1);
 		config.setProperty("seed", 0);
 
 		model.configure(config);
@@ -111,7 +112,6 @@ public class BarabasiAlbertModelTest {
 		System.out.println();
 
 		assertEquals(network.getLinkCount() * 2, sumDeg);
-
 	}
 
 }
