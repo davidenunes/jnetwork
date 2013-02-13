@@ -70,4 +70,28 @@ public class NetworkModelUtils {
 		return Pair.of(node1, node2);
 	}
 
+	/**
+	 * Utility used to select a random random (by id) excluding a given vector
+	 * of id values. This assumes that all the node IDs are sequential and a
+	 * network has at max a given number of nodes.
+	 * 
+	 * @param random
+	 *            a random number generator
+	 * @param numNodes
+	 *            the max number of nodes
+	 * @param exclude
+	 *            the IDs to be excluded from the selection
+	 * @return
+	 */
+	public static int getRandomNode(Random random, int numNodes, int[] exclude) {
+		int r = random.nextInt(numNodes + 1 - exclude.length);
+		for (int e : exclude) {
+			if (r < e) {
+				return r;
+			}
+			r++;
+		}
+		return r;
+	}
+
 }
