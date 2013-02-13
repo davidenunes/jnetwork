@@ -25,6 +25,7 @@
 package org.bhave.network.model.utils;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.math3.random.RandomGenerator;
 import org.apache.commons.math3.util.FastMath;
 
 public class NetworkModelUtils {
@@ -83,8 +84,8 @@ public class NetworkModelUtils {
 	 *            the IDs to be excluded from the selection
 	 * @return
 	 */
-	public static int getRandomNode(Random random, int numNodes, int[] exclude) {
-		int r = random.nextInt(numNodes + 1 - exclude.length);
+	public static int getRandomNode(RandomGenerator random, int numNodes, int[] exclude) {
+		int r = random.nextInt(numNodes - exclude.length);
 		for (int e : exclude) {
 			if (r < e) {
 				return r;

@@ -25,11 +25,14 @@
 
 package org.bhave.network.model;
 
+import org.apache.commons.configuration.ConfigurationException;
+
 /**
  * 
  * @author Davide Nunes
  * 
  */
 public interface WSModel extends NetworkModel {
+	void configure(int numNodes, int k, double p, long seed) throws ConfigurationException;
 
 }
