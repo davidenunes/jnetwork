@@ -36,9 +36,11 @@ import org.bhave.network.model.BAModel;
 import org.bhave.network.model.ERModel;
 import org.bhave.network.model.GilbertModel;
 import org.bhave.network.model.KRegularModel;
+import org.bhave.network.model.WSModel;
 import org.bhave.network.model.impl.DefaultBAForestModel;
 import org.bhave.network.model.impl.DefaultBAModel;
 import org.bhave.network.model.impl.DefaultKRegularModel;
+import org.bhave.network.model.impl.DefaultWSModel;
 import org.bhave.network.model.impl.EERModel;
 import org.bhave.network.model.impl.EGilberModel;
 
@@ -91,6 +93,7 @@ public class NetworkModule extends AbstractModule {
 		bind(KRegularModel.class).to(DefaultKRegularModel.class);
 		bind(ERModel.class).to(EERModel.class);
 		bind(GilbertModel.class).to(EGilberModel.class);
+		bind(WSModel.class).to(DefaultWSModel.class);
 	}
 
 }
