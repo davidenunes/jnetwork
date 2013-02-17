@@ -25,6 +25,7 @@
 package org.bhave.network.model.utils;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.math3.random.RandomGenerator;
 import org.apache.commons.math3.util.FastMath;
 
 public class NetworkModelUtils {
@@ -68,6 +69,30 @@ public class NetworkModelUtils {
 		int node2 = (int) (column + 1);
 
 		return Pair.of(node1, node2);
+	}
+
+	/**
+	 * Utility used to select a random random (by id) excluding a given vector
+	 * of id values. This assumes that all the node IDs are sequential and a
+	 * network has at max a given number of nodes.
+	 * 
+	 * @param random
+	 *            a random number generator
+	 * @param numNodes
+	 *            the max number of nodes
+	 * @param exclude
+	 *            the IDs to be excluded from the selection
+	 * @return
+	 */
+	public static int getRandomNode(RandomGenerator random, int numNodes, int[] exclude) {
+		int r = random.nextInt(numNodes - exclude.length);
+		for (int e : exclude) {
+			if (r < e) {
+				return r;
+			}
+			r++;
+		}
+		return r;
 	}
 
 }
