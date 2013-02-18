@@ -89,13 +89,13 @@ public class BarabasiAlbertModelTest {
 
 	@Test
 	public void generateTest() throws ConfigurationException {
-		int numNodes = 100;
+		int numNodes = 1000;
 
 		BAModel model = injector
 				.getInstance(BAModel.class);
 		Configuration config = model.getConfiguration();
 		config.setProperty("numNodes", numNodes);
-		config.setProperty("d", 1);
+		config.setProperty("d", 20);
 		config.setProperty("seed", 0);
 
 		model.configure(config);

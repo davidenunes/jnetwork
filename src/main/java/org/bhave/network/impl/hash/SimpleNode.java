@@ -46,8 +46,8 @@ public class SimpleNode implements Node {
 	 * Copy Constructor. Creates a link by copying an existing Link. This is to
 	 * avoid the clone
 	 * 
-	 * @param link
-	 *            a link to be copied
+	 * @param node
+	 *            a node to be copied
 	 */
 	public SimpleNode(SimpleNode node) {
 		this(node.getID());

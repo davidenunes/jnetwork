@@ -82,9 +82,12 @@ public class NetworkModelUtils {
 	 *            the max number of nodes
 	 * @param exclude
 	 *            the IDs to be excluded from the selection
-	 * @return
+	 * @return a random node id from the (numNodes) possible IDs. Assumes the
+	 *         IDs are sequential and the exclude array is sorted by ascending
+	 *         order
 	 */
-	public static int getRandomNode(RandomGenerator random, int numNodes, int[] exclude) {
+	public static int getRandomNode(RandomGenerator random, int numNodes,
+			int[] exclude) {
 		int r = random.nextInt(numNodes - exclude.length);
 		for (int e : exclude) {
 			if (r < e) {

@@ -50,8 +50,7 @@ public class DefaultBAModel extends AbstractNetworkModel implements BAModel {
 	private static final String PARAM_MIN_DEG = "d";
 
 	@Inject
-	public DefaultBAModel(Configuration config,
-			RandomGenerator random,
+	public DefaultBAModel(Configuration config, RandomGenerator random,
 			Provider<Network> networkProvider) {
 		super(config, random, networkProvider);
 
@@ -103,8 +102,7 @@ public class DefaultBAModel extends AbstractNetworkModel implements BAModel {
 				}
 				int r = random.nextInt(tempMaxLimit);
 
-				int p = prefferentialAttachment(scores, r, tempMaxLimit,
-						current);
+				int p = preferentialAttachment(scores, r, tempMaxLimit, current);
 				network.addLink(nodes[perm[v]], nodes[perm[p]]);
 				numLinks++;
 				current.add(p);
@@ -128,9 +126,10 @@ public class DefaultBAModel extends AbstractNetworkModel implements BAModel {
 	 * @param maxScore
 	 * 
 	 * @param exclude
-	 * @return
+	 * 
+	 * @return a node according to the preferential attachment mechanism
 	 */
-	private int prefferentialAttachment(int[] scores, int r, int maxScore,
+	private int preferentialAttachment(int[] scores, int r, int maxScore,
 			Set<Integer> exclude) {
 
 		int currentScore = 0;

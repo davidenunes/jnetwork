@@ -40,7 +40,7 @@ import org.apache.commons.configuration.ConfigurationException;
  * 
  * <h2>Configuring The Model</h2>
  * <p>
- * You can either use the method {@link BAModel#configure(int, long)} present in
+ * You can either use the method {@link BAForestModel#configure(int, long)} present in
  * the current interface or the general
  * {@link NetworkModel#configure(org.apache.commons.configuration.Configuration)
  * configure} method from the {@link NetworkModel} interface.

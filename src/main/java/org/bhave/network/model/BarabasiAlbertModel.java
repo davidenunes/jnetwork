@@ -35,7 +35,7 @@ import org.apache.commons.configuration.ConfigurationException;
  * 
  * <h2>Configuring The Model</h2>
  * <p>
- * You can either use the method {@link BarabasiAlbertModel#configure(int, int)}
+ * You can either use the method {@link BarabasiAlbertModel#configure(int, int, long)}
  * present in the current interface or the general
  * {@link NetworkModel#configure(org.apache.commons.configuration.Configuration)
  * configure} method from the {@link NetworkModel} interface.

@@ -106,8 +106,7 @@ public class CopyOfEBarabasiAlbertModel implements BarabasiAlbertModel {
 				}
 				int r = random.nextInt(tempMaxLimit);
 
-				int p = prefferentialAttachment(scores, r, tempMaxLimit,
-						current);
+				int p = preferentialAttachment(scores, r, tempMaxLimit, current);
 				network.addLink(nodes.get(v), nodes.get(p));
 				numLinks++;
 				current.add(p);
@@ -130,11 +129,12 @@ public class CopyOfEBarabasiAlbertModel implements BarabasiAlbertModel {
 	 *            a random number uniformly selected between 0 and the sum of
 	 *            all node degrees
 	 * @param maxScore
-	 * 			  
+	 * 
 	 * @param exclude
-	 * @return
+	 * 
+	 * @return a node according to the preferential Attachment mechanism
 	 */
-	private int prefferentialAttachment(int[] scores, int r, int maxScore,
+	private int preferentialAttachment(int[] scores, int r, int maxScore,
 			Set<Integer> exclude) {
 
 		int currentScore = 0;

@@ -1,2 +1,11 @@
 org.bhave.network
 org.bhave.network.api
+org.bhave.network.impl.hash
+org.bhave.network.impl.hash.dynamic
+org.bhave.network.model
+org.bhave.network.model.impl
+org.bhave.network.model.utils
+org.bhave.test.network.impl.hash
+org.bhave.test.network.model.impl
+org.bhave.test.network.model.random
+org.bhave.test.network.model.utils
