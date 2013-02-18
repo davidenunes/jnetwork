@@ -48,10 +48,10 @@ given node, etc.
 
 ## Latest releases
 ### Nightly builds
-Current version is 0.0.1-SNAPSHOT
-* [bhave.network-0.0.1-SNAPSHOT.jar](https://mega.co.nz/#!qZRkASrL!JsvmaATj_WNjQlvJT5UL6VTMr4t4hyCjIAqAQEL39CQ)
-* [bhave.network-0.0.1-SNAPSHOT-sources.jar](https://mega.co.nz/#!mQBnmCBb!NREfQR7ZEzLoxNLrmfpli1YoW24zybW1_WcM0Khqoc8)
-* [bhave.network-0.0.1-SNAPSHOT-javadoc.jar](https://mega.co.nz/#!eM5jyLqD!DTJJKGY_yvsD43BDJza9ZFd8OdtVXHADe-n-UX9xnsc)
+Current version is 0.0.3-SNAPSHOT
+* [bhave.network-0.0.3-SNAPSHOT.jar](https://mega.co.nz/#!7MQQhJTB!UpRSJXbPMy07ZOQJxyt0FU-dHP4eN7gsKox7RqaHwXU)
+* [bhave.network-0.0.3-SNAPSHOT-sources.jar](https://mega.co.nz/#!zJpQ2CaJ!NUFCEGnLRU924QCJFCFpsTud7Ihq3_vEIU88tREBVqQ)
+* [bhave.network-0.0.1-SNAPSHOT-javadoc.jar](https://mega.co.nz/#!3YR1VKzb!TXDRwR0Brqf9-7zZcxEfXUBxE95XYnwIleq7i20c3MY)
 
 ## Licence
  B-Have Network Library
