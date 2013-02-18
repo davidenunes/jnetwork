@@ -6,7 +6,17 @@ either as directed or undirected using the same simple `Network` API.
 This library hides the implementation details by using the [Guice](http://code.google.com/p/google-guice/)
 which is a dependency injection framework from *Google* that allows for code modularity.
 
-## Hello Network
+## Latest releases
+### Nightly builds
+Current version is 0.0.3-SNAPSHOT
+* [bhave.network-0.0.3-SNAPSHOT.jar](https://mega.co.nz/#!7MQQhJTB!UpRSJXbPMy07ZOQJxyt0FU-dHP4eN7gsKox7RqaHwXU)
+* [bhave.network-0.0.3-SNAPSHOT-sources.jar](https://mega.co.nz/#!zJpQ2CaJ!NUFCEGnLRU924QCJFCFpsTud7Ihq3_vEIU88tREBVqQ)
+* [bhave.network-0.0.1-SNAPSHOT-javadoc.jar](https://mega.co.nz/#!3YR1VKzb!TXDRwR0Brqf9-7zZcxEfXUBxE95XYnwIleq7i20c3MY)
+
+
+
+## A brief overview
+### Hello Network
 There are three basic building blocks in this network API: `Network` objects, `Node` objects and `Link` objects.
 
 To create `Network` instances we must first initialise our [Guice](http://code.google.com/p/google-guice/) injector. 
@@ -46,7 +56,7 @@ network.addLink(node1,node2, link);
 Thats pretty much it. You can now add more nodes, return links between existing nodes, get the neighbours of a 
 given node, etc.
 
-## Dynamic Networks
+### Dynamic Networks
 A `DynamicNetwork` works exactly as a normal `Network` object with the addition of discrete time instances. By default, these network instances are created with a time instance `t = 0`. You can use all the operations from `Network`, these will be
 associated with this time instance. Whenever you want to model a time change in your `DynamicNetwork`, you can use the 
 available operation `setCurrentTime(int)`. If this time instance didn't exist, a deep copy of the previous discrete time instance is created and you can now
@@ -74,14 +84,6 @@ In the previous example `networkT5` contains an instance of a network. As you lo
 mechanisms, you can only call methods from `Network` with this object. Moreover, all the alterations on `networkT5` are
 done for `t=5`. Also note that if you set the time on the `network` object, the time on `networkT5` is also changed as they 
 refer the same object.
-
-
-## Latest releases
-### Nightly builds
-Current version is 0.0.3-SNAPSHOT
-* [bhave.network-0.0.3-SNAPSHOT.jar](https://mega.co.nz/#!7MQQhJTB!UpRSJXbPMy07ZOQJxyt0FU-dHP4eN7gsKox7RqaHwXU)
-* [bhave.network-0.0.3-SNAPSHOT-sources.jar](https://mega.co.nz/#!zJpQ2CaJ!NUFCEGnLRU924QCJFCFpsTud7Ihq3_vEIU88tREBVqQ)
-* [bhave.network-0.0.1-SNAPSHOT-javadoc.jar](https://mega.co.nz/#!3YR1VKzb!TXDRwR0Brqf9-7zZcxEfXUBxE95XYnwIleq7i20c3MY)
 
 ## Licence
  B-Have Network Library
