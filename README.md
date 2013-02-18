@@ -46,6 +46,36 @@ network.addLink(node1,node2, link);
 Thats pretty much it. You can now add more nodes, return links between existing nodes, get the neighbours of a 
 given node, etc.
 
+## Dynamic Networks
+A `DynamicNetwork` works exactly as a normal `Network` object with the addition of discrete time instances. By default, these network instances are created with a time instance `t = 0`. You can use all the operations from `Network`, these will be
+associated with this time instance. Whenever you want to model a time change in your `DynamicNetwork`, you can use the 
+available operation `setCurrentTime(int)`. If this time instance didn't exist, a deep copy of the previous discrete time instance is created and you can now
+work with the network set to the given time. If the time you are switching to already existed, the `DynamicNetwork` just 
+alters its state so you can work on it.
+
+An example is given bellow: 
+```java
+Injector injector = Guice.createInjector(new NetworkModule());
+DynamicNetwork network = injector.getInstance(DynamicNetwork.class);
+
+//create new nodes at t=0
+Node node1 = network.createNode();
+Node node2 = network.createNode();
+
+network.setCurrentTime(5);
+
+//create new node at t=5
+Node node3 = network.createNode();
+
+Network networkT5 = network;
+```
+Note that the `DynamicNetwork` class is a subtype of `Network` hence you can use encapsulation here. 
+In the previous example `networkT5` contains an instance of a network. As you loose access to the time manipulation 
+mechanisms, you can only call methods from `Network` with this object. Moreover, all the alterations on `networkT5` are
+done for `t=5`. Also note that if you set the time on the `network` object, the time on `networkT5` is also changed as they 
+refer the same object.
+
+
 ## Latest releases
 ### Nightly builds
 Current version is 0.0.3-SNAPSHOT
