@@ -11,7 +11,7 @@ which is a dependency injection framework from *Google* that allows for code mod
 Current version is 0.0.3-SNAPSHOT
 * [bhave.network-0.0.3-SNAPSHOT.jar](http://dl.dropbox.com/u/336879/Projects/Releases/bhave.network-0.0.3-SNAPSHOT.jar)
 * [bhave.network-0.0.3-SNAPSHOT-sources.jar](http://dl.dropbox.com/u/336879/Projects/Releases/bhave.network-0.0.3-SNAPSHOT-sources.jar)
-* [bhave.network-0.0.1-SNAPSHOT-javadoc.jar](http://dl.dropbox.com/u/336879/Projects/Releases/bhave.network-0.0.3-SNAPSHOT-javadoc.jar)
+* [bhave.network-0.0.3-SNAPSHOT-javadoc.jar](http://dl.dropbox.com/u/336879/Projects/Releases/bhave.network-0.0.3-SNAPSHOT-javadoc.jar)
 
 
 
