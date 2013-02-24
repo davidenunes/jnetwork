@@ -9,9 +9,9 @@ which is a dependency injection framework from *Google* that allows for code mod
 ## Latest releases
 ### Nightly builds
 Current version is 0.0.3-SNAPSHOT
-* [bhave.network-0.0.3-SNAPSHOT.jar](https://mega.co.nz/#!7MQQhJTB!UpRSJXbPMy07ZOQJxyt0FU-dHP4eN7gsKox7RqaHwXU)
-* [bhave.network-0.0.3-SNAPSHOT-sources.jar](https://mega.co.nz/#!zJpQ2CaJ!NUFCEGnLRU924QCJFCFpsTud7Ihq3_vEIU88tREBVqQ)
-* [bhave.network-0.0.1-SNAPSHOT-javadoc.jar](https://mega.co.nz/#!3YR1VKzb!TXDRwR0Brqf9-7zZcxEfXUBxE95XYnwIleq7i20c3MY)
+* [bhave.network-0.0.3-SNAPSHOT.jar](http://dl.dropbox.com/u/336879/Projects/Releases/bhave.network-0.0.3-SNAPSHOT.jar)
+* [bhave.network-0.0.3-SNAPSHOT-sources.jar](http://dl.dropbox.com/u/336879/Projects/Releases/bhave.network-0.0.3-SNAPSHOT-sources.jar)
+* [bhave.network-0.0.1-SNAPSHOT-javadoc.jar](http://dl.dropbox.com/u/336879/Projects/Releases/bhave.network-0.0.3-SNAPSHOT-javadoc.jar)
 
 
 
