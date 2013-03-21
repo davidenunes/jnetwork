@@ -51,7 +51,6 @@ public class HashNetwork implements Network {
 
 	// directed map the nodes to links
 	private MultiKeyMap nl;
-
 	// map links to nodes
 	private Map<Link, Pair<Node, Node>> ln;
 

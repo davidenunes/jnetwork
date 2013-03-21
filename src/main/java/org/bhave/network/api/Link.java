@@ -23,6 +23,8 @@
  */
 package org.bhave.network.api;
 
+import org.bhave.network.impl.fast.FastNetwork;
+
 /**
  * <p>
  * Defines a network <b>Link</b>. These are used to connect network. In this API
@@ -94,5 +96,40 @@ public interface Link {
 	 * @return the property value.
 	 */
 	public String getProperty(String key);
+
+	/**
+	 * Returns a node at the starting end of this link
+	 * 
+	 * @return a node
+	 */
+	public Node from();
+
+	/**
+	 * Returns a node at the ending of this link
+	 * 
+	 * @return a node
+	 */
+	public Node to();
+
+	/**
+	 * Returns a deep copy of the current link
+	 * 
+	 * @return a copy of this link
+	 */
+	public Link getCopy();
+
+	/**
+	 * Returns the network this link belongs to
+	 * 
+	 * @return a network
+	 */
+	public Network getNetwork();
+
+	/**
+	 * sets the network this link belongs to
+	 * 
+	 * @param fastNetwork
+	 */
+	public void setNetwork(Network network);
 
 }

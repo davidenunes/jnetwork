@@ -65,4 +65,25 @@ public interface Node {
 	 */
 	public String getProperty(String key);
 
+	/**
+	 * Returns a deep copy of this node
+	 * 
+	 * @return a node copy
+	 */
+	public Node getCopy();
+
+	/**
+	 * Returns the network this node belongs to
+	 * 
+	 * @return a network
+	 */
+	public Network getNetwork();
+
+	/**
+	 * sets the network this node belongs to
+	 * 
+	 * @param network
+	 */
+	public void setNetwork(Network network);
+
 }

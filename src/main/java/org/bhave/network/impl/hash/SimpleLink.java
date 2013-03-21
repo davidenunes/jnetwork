@@ -26,6 +26,8 @@ package org.bhave.network.impl.hash;
 import java.util.Properties;
 
 import org.bhave.network.api.Link;
+import org.bhave.network.api.Network;
+import org.bhave.network.api.Node;
 
 /**
  * Implementation of {@link Link}
@@ -37,10 +39,16 @@ public class SimpleLink implements Link {
 	private Properties properties;
 
 	private double value;
+	private Node from;
+	private Node to;
+	private Network network;
 
-	public SimpleLink(int id) {
+	public SimpleLink(int id, Node from, Node to) {
 		this.id = id;
+		this.from = from;
+		this.to = to;
 		properties = new Properties();
+
 	}
 
 	/**
@@ -51,7 +59,7 @@ public class SimpleLink implements Link {
 	 *            a link to be copied
 	 */
 	public SimpleLink(SimpleLink link) {
-		this(link.getID());
+		this(link.id, link.from, link.to);
 		this.value = link.value;
 
 		for (Object key : link.properties.keySet()) {
@@ -111,6 +119,31 @@ public class SimpleLink implements Link {
 	public void setValue(double value) {
 		this.value = value;
 
+	}
+
+	@Override
+	public Node from() {
+		return from;
+	}
+
+	@Override
+	public Node to() {
+		return to;
+	}
+
+	@Override
+	public Link getCopy() {
+		return new SimpleLink(this);
+	}
+
+	@Override
+	public Network getNetwork() {
+		return network;
+	}
+
+	@Override
+	public void setNetwork(Network network) {
+		this.network = network;
 	}
 
 }
