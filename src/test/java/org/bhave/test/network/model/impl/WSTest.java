@@ -16,33 +16,32 @@ import com.google.inject.Injector;
 
 public class WSTest {
 
-	private static final Injector injector = Guice
-			.createInjector(new NetworkModule());
+    private static final Injector injector = Guice
+            .createInjector(new NetworkModule());
 
-	@Test
-	public void testBasicGenerate() {
-		WSModel model = injector.getInstance(WSModel.class);
+    @Test
+    public void testBasicGenerate() {
+        WSModel model = injector.getInstance(WSModel.class);
 
-		int numNodes = 10000;
-		int k = 2;
-		double p = 0.01;
-		long seed = 0;
+        int numNodes = 10000;
+        int k = 2;
+        double p = 0.01;
+        long seed = 0;
 
-		try {
-			model.configure(numNodes, k, p, seed);
-		} catch (ConfigurationException e) {
-			fail(e.getMessage());
-		}
+        try {
+            model.configure(numNodes, k, p, seed);
+        } catch (ConfigurationException e) {
+            fail(e.getMessage());
+        }
 
-		Network network = model.generate();
-		assertNotNull(network);
-		
-		
-		for(Link l : network.getLinks()){
-			Pair<Node, Node> nodes = network.getNodes(l);
-			System.out.println(nodes);
-		}
+        Network network = model.generate();
+        assertNotNull(network);
 
-	}
 
+        for (Link l : network.getLinks()) {
+            Pair<Node, Node> nodes = l.nodes();
+            System.out.println(nodes);
+        }
+
+    }
 }

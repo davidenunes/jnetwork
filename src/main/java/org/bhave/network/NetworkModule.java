@@ -29,7 +29,6 @@ import org.apache.commons.math3.random.MersenneTwister;
 import org.apache.commons.math3.random.RandomGenerator;
 import org.bhave.network.api.DynamicNetwork;
 import org.bhave.network.api.Network;
-import org.bhave.network.impl.hash.HashNetwork;
 import org.bhave.network.impl.hash.dynamic.DynamicHashNetwork;
 import org.bhave.network.model.BAForestModel;
 import org.bhave.network.model.BAModel;
@@ -45,6 +44,7 @@ import org.bhave.network.model.impl.EERModel;
 import org.bhave.network.model.impl.EGilberModel;
 
 import com.google.inject.AbstractModule;
+import org.bhave.network.impl.fast.FastNetwork;
 
 /**
  * <p>
@@ -79,7 +79,7 @@ public class NetworkModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		// Network API
-		bind(Network.class).to(HashNetwork.class);
+		bind(Network.class).to(FastNetwork.class);
 
 		bind(DynamicNetwork.class).to(DynamicHashNetwork.class);
 

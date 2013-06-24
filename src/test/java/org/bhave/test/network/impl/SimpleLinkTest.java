@@ -21,13 +21,14 @@
  * along with the b-have network library.  
  * If not, see <http://www.gnu.org/licenses/gpl.html>.
  */
-package org.bhave.test.network.impl.hash;
+package org.bhave.test.network.impl;
 
 import static org.junit.Assert.*;
 
 import java.util.Properties;
 
-import org.bhave.network.impl.hash.SimpleLink;
+import org.bhave.network.impl.fast.SimpleLink;
+import org.bhave.network.impl.fast.SimpleNode;
 import org.junit.Test;
 
 public class SimpleLinkTest {
@@ -40,7 +41,7 @@ public class SimpleLinkTest {
 		assertEquals("v1", p.getProperty("k1"));
 		
 		
-		SimpleLink link = new SimpleLink(1);
+		SimpleLink link = new SimpleLink(1, new SimpleNode(0), new SimpleNode(1));
 		link.setProperty("k1", "v1");
 		link.setProperty("k2", "v2");
 		
