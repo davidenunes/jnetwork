@@ -60,6 +60,42 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
         this(false);
     }
 
+    /**
+     * Removes a node from the list of all nodes without destroying the indexes
+     */
+    private void removeNodeU(Node node) {
+        NodeIndex index = nodeI.get(node);
+
+        if (index.nodeIndex < nodes.size() - 1) {
+            Node last = nodes.get(nodes.size() - 1);
+            nodes.set(index.nodeIndex, last);
+
+
+            NodeIndex lastIndex = nodeI.get(last);
+            lastIndex.nodeIndex = index.nodeIndex;
+        }
+
+        nodes.remove(nodes.size() - 1);
+    }
+
+    /**
+     * Removes a link from the list of all nodes without destroying the indexes
+     */
+    private void removeLinkU(Link link) {
+        LinkIndex index = linkI.get(link);
+
+        if (index.linkIndex < links.size() - 1) {
+            Link last = links.get(links.size() - 1);
+            links.set(index.linkIndex, last);
+
+
+            LinkIndex lastIndex = linkI.get(last);
+            lastIndex.linkIndex = index.linkIndex;
+        }
+
+        links.remove(links.size() - 1);
+    }
+
     public FastNetwork(boolean directed) {
         this.directed = directed;
         nodes = new ArrayList<>();
@@ -139,8 +175,8 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
         int linkToIndex = inIndex.inLinks.size() - 1;
 
         // Create a link index entry
-        LinkIndex li = new LinkIndex(links.size() - 1, outIndex,
-                inIndex);
+        LinkIndex li = new LinkIndex(links.size() - 1, linkFromIndex,
+                linkToIndex);
         linkI.put(link, li);
 
         //add link to node pair index
@@ -230,7 +266,7 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
         //remove node from nodeList
         if (containsNode(node)) {
             //remove node from nodes list
-            nodes.remove(nodeI.get(node).nodeIndex);
+            removeNodeU(node);
 
             //clean the node index and remove all the links attacked to the node
             NodeIndex nodeIndex = nodeI.get(node);
@@ -244,7 +280,7 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
                     for (Link link : nodeIndex.outLinks) {
                         //remove from links
                         LinkIndex li = linkI.get(link);
-                        links.remove(li.linkIndex);
+                        removeLinkU(link);
                         //mark for removal remove the link index
                         linksToRemove.add(link);
 
@@ -256,7 +292,7 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
                 for (Link link : nodeIndex.inLinks) {
                     //remove from links
                     LinkIndex li = linkI.get(link);
-                    links.remove(li.linkIndex);
+                    removeLinkU(link);
                     //remove the link index
                     linksToRemove.add(link);
                 }
@@ -274,10 +310,87 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
         return false;
     }
 
+    private void deleteLinkFromIndex(Link link) {
+        LinkIndex index = linkI.get(link);
+
+        NodeIndex fromNode = nodeI.get(link.from());
+        NodeIndex toNode = nodeI.get(link.to());
+
+
+        //the network is directed so we can proceede normaly
+        if (directed) {
+            if (fromNode.outLinks != null) {
+                //remove from out outLinks List
+                if (index.fromIndex < fromNode.outLinks.size() - 1) {
+                    //swap with the last 
+                    Link last = fromNode.outLinks.get(fromNode.outLinks.size() - 1);
+                    fromNode.outLinks.set(index.fromIndex, last);
+                    LinkIndex lastLink = linkI.get(last);
+                    lastLink.fromIndex = index.fromIndex;
+                }
+                fromNode.outLinks.remove(fromNode.outLinks.size() - 1);
+            }
+            if (toNode.inLinks != null) {
+                //remove from out outLinks List
+                if (index.toIndex < toNode.inLinks.size() - 1) {
+                    //swap with the last 
+                    Link last = toNode.inLinks.get(toNode.inLinks.size() - 1);
+                    toNode.inLinks.set(index.toIndex, last);
+                    LinkIndex lastLink = linkI.get(last);
+                    lastLink.toIndex = index.toIndex;
+                }
+                toNode.inLinks.remove(toNode.inLinks.size() - 1);
+            }
+        } else {
+            //not directed, delete link from both inLinks
+
+            //DELETE FROM THE FIRST NODE INDEX (FROM)
+            if (fromNode.inLinks != null) {
+                //remove from out outLinks List
+                if (index.fromIndex < fromNode.inLinks.size() - 1) {
+                    //swap with the last 
+                    Link last = fromNode.inLinks.get(fromNode.inLinks.size() - 1);
+                    fromNode.inLinks.set(index.fromIndex, last);
+                    LinkIndex lastLink = linkI.get(last);
+
+                    if (last.from().equals(link.from())) {
+                        lastLink.fromIndex = index.fromIndex;
+                    } else {
+                        lastLink.toIndex = index.fromIndex;
+                    }
+                }
+                fromNode.inLinks.remove(fromNode.inLinks.size() - 1);
+            }
+
+            //DELETE FROM THE SECOND NODE IDNEX (TO)
+            if (toNode.inLinks != null) {
+                //remove from out outLinks List
+                if (index.toIndex < toNode.inLinks.size() - 1) {
+                    //swap with the last 
+                    Link last = toNode.inLinks.get(toNode.inLinks.size() - 1);
+                    toNode.inLinks.set(index.toIndex, last);
+
+                    LinkIndex lastLink = linkI.get(last);
+
+                    if (last.to().equals(link.to())) {
+                        lastLink.toIndex = index.toIndex;
+                    } else {
+                        lastLink.fromIndex = index.toIndex;
+                    }
+                }
+                toNode.inLinks.remove(toNode.inLinks.size() - 1);
+            }
+        }
+
+        //delete the link index entry, no longer needed
+        linkI.remove(link);
+
+    }
+
     /**
      * Removes a given link from the existing node indexes
      */
-    private void deleteLinkFromIndex(Link link) {
+    private void deleteLinkFromIndexOriginal(Link link) {
         LinkIndex index = linkI.get(link);
 
         NodeIndex fromIndex = nodeI.get(link.from());
@@ -288,8 +401,8 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
             if (fromIndex.outLinks != null) {
                 fromIndex.outLinks.remove(index.fromIndex);
             }
-            if (toIndex.outLinks != null) {
-                toIndex.outLinks.remove(index.toIndex);
+            if (toIndex.inLinks != null) {
+                toIndex.inLinks.remove(index.toIndex);
             }
         }
         //remove the links from the in links
@@ -300,8 +413,8 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
             toIndex.inLinks.remove(index.toIndex);
         }
 
-        //delete the link index entry, no longer needed
-        linkI.remove(link);
+
+
     }
 
     @Override
@@ -317,7 +430,7 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
     public boolean removeLink(Link link) {
         if (containsLink(link)) {
             //remove from links
-            links.remove(linkI.get(link).linkIndex);
+            removeLinkU(link);
 
             //delete link from node indexes and delete link index
             deleteLinkFromIndex(link);
@@ -562,11 +675,11 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
         //index of this link in the nodeIndex in or out array of links
 
         public int linkIndex;
-        public NodeIndex fromIndex;
-        public NodeIndex toIndex;
+        public int fromIndex;
+        public int toIndex;
 
-        public LinkIndex(final int linkIndex, final NodeIndex fromIndex,
-                final NodeIndex toIndex) {
+        public LinkIndex(final int linkIndex, final int fromIndex,
+                final int toIndex) {
             this.linkIndex = linkIndex;
             this.fromIndex = fromIndex;
             this.toIndex = toIndex;
