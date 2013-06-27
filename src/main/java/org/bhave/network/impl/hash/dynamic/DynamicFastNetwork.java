@@ -50,7 +50,7 @@ import org.bhave.network.impl.fast.FastNetwork;
  * @author Davide Nunes
  *
  */
-public class DynamicHashNetwork implements DynamicNetwork {
+public class DynamicFastNetwork implements DynamicNetwork {
 
     private int currentTime;
     private NavigableMap<Integer, FastNetwork> networks; // map time instant to
@@ -66,7 +66,7 @@ public class DynamicHashNetwork implements DynamicNetwork {
      * network works exactly like a normal network would.
      */
     @Inject
-    public DynamicHashNetwork() {
+    public DynamicFastNetwork() {
         networks = new TreeMap<>();
         currentTime = 0;
 
@@ -269,5 +269,24 @@ public class DynamicHashNetwork implements DynamicNetwork {
     public int getFirstTime() {
 
         return networks.firstKey();
+    }
+
+    @Override
+    public DynamicNetwork getCopy() {
+        DynamicFastNetwork newNetwork = new DynamicFastNetwork();
+        newNetwork.currentTime = currentTime;
+
+        //copy all the network instances
+        for (Integer time : networks.keySet()) {
+            //deep copy of the network in the current time instance
+            FastNetwork currentNetwork = this.networks.get(time).getCopy();
+            newNetwork.networks.put(time, currentNetwork);
+        }
+        return newNetwork;
+    }
+
+    @Override
+    public boolean addLink(Link link) {
+        return networks.get(currentTime).addLink(link);
     }
 }

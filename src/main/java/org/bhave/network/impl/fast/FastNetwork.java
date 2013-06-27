@@ -22,6 +22,7 @@
  */
 package org.bhave.network.impl.fast;
 
+import com.google.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,16 +33,18 @@ import java.util.Set;
 
 import org.apache.commons.collections.map.MultiKeyMap;
 import org.apache.commons.lang3.tuple.Pair;
+import org.bhave.network.api.DirectedNetwork;
 import org.bhave.network.api.Link;
 import org.bhave.network.api.Network;
 import org.bhave.network.api.Node;
+import org.bhave.network.api.UndirectedNetwork;
 
 /**
  * Fast Implementation of {@link Network} interface.
  *
  * @author Davide Nunes
  */
-public class FastNetwork implements Network {
+public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network {
 
     private static final long serialVersionUID = 1L;
     boolean directed;
@@ -53,8 +56,6 @@ public class FastNetwork implements Network {
     ArrayList<Node> nodes;
     // store links
     ArrayList<Link> links;
-    // directed map the nodes to links
-    MultiKeyMap nodesToLinks;
 
     // constructors
     public FastNetwork() {
@@ -63,6 +64,10 @@ public class FastNetwork implements Network {
 
     public FastNetwork(boolean directed) {
         this.directed = directed;
+        nodes = new ArrayList<>();
+        links = new ArrayList<>();
+        nodeI = new HashMap<>();
+        linkI = new HashMap<>();
     }
 
     public FastNetwork(FastNetwork other) {
@@ -76,6 +81,7 @@ public class FastNetwork implements Network {
      *
      * @return a copy of this network
      */
+    @Override
     public FastNetwork getCopy() {
         FastNetwork network = new FastNetwork(this);
         return network;
@@ -87,14 +93,15 @@ public class FastNetwork implements Network {
      *
      * @param link
      */
-    private void addLink(Link link) {
+    @Override
+    public boolean addLink(Link link) {
         if (link == null) {
             throw new RuntimeException("Can't add a null Link to the network");
         }
         if (link.from() == null || link.to() == null) {
             throw new RuntimeException("The link is not connecting anything.");
         }
-        link.setNetwork((Network) this);
+        link.setNetwork(this);
 
         // add link to links
         links.add(link);
@@ -110,7 +117,7 @@ public class FastNetwork implements Network {
         // lazy initialisation
         if (outIndex.outLinks == null) {
             if (directed) {
-                outIndex.outLinks = new ArrayList<Link>();
+                outIndex.outLinks = new ArrayList<>();
             } else {
                 outIndex.outLinks = (outIndex.inLinks != null) ? outIndex.inLinks
                         : (outIndex.inLinks = new ArrayList<>());
@@ -126,13 +133,7 @@ public class FastNetwork implements Network {
             inIndex = nodeI.get(link.to());
         }
         if (inIndex.inLinks == null) {
-            if (directed) {
-                inIndex.inLinks = new ArrayList<>();
-            } else {
-
-                inIndex.inLinks = (inIndex.outLinks != null) ? inIndex.outLinks
-                        : (inIndex.outLinks = new ArrayList<>());
-            }
+            inIndex.inLinks = new ArrayList<>();
         }
         inIndex.inLinks.add(link);
 
@@ -142,6 +143,8 @@ public class FastNetwork implements Network {
         LinkIndex li = new LinkIndex(links.size() - 1, linkFromIndex,
                 linkToIndex);
         linkI.put(link, li);
+
+        return true;
     }
 
     /**
@@ -173,7 +176,9 @@ public class FastNetwork implements Network {
 
     @Override
     public Node createNode() {
-        return new SimpleNode(nextNodeID++);
+        SimpleNode newNode = new SimpleNode(nextNodeID++);
+
+        return newNode;
     }
 
     @Override
@@ -183,9 +188,11 @@ public class FastNetwork implements Network {
 
     @Override
     public Link addLink(Node node1, Node node2) {
-        Link newLink = createLink(node2, node2);
+
+        Link newLink = createLink(node1, node2);
         addLink(newLink);
         return newLink;
+
     }
 
     @Override
@@ -198,6 +205,7 @@ public class FastNetwork implements Network {
             //clean the node index and remove all the links attacked to the node
             NodeIndex nodeIndex = nodeI.get(node);
 
+            Set<Link> linksToRemove = new HashSet<>();
 
             //remove all the links associated with the node
             if (directed) {
@@ -207,8 +215,9 @@ public class FastNetwork implements Network {
                         //remove from links
                         LinkIndex li = linkI.get(link);
                         links.remove(li.linkIndex);
-                        //remove the link index
-                        deleteLinkFromIndex(link);
+                        //mark for removal remove the link index
+                        linksToRemove.add(link);
+
                     }
                 }
             }
@@ -219,9 +228,13 @@ public class FastNetwork implements Network {
                     LinkIndex li = linkI.get(link);
                     links.remove(li.linkIndex);
                     //remove the link index
-                    deleteLinkFromIndex(link);
+                    linksToRemove.add(link);
                 }
             }
+            for (Link linkToRemove : linksToRemove) {
+                deleteLinkFromIndex(linkToRemove);
+            }
+
             //remove this after the links are deleted from the indexes 
 
             nodeI.remove(node);
@@ -290,6 +303,7 @@ public class FastNetwork implements Network {
     public Node getNode(int id) {
 
         SimpleNode dummyNode = new SimpleNode(id);
+        dummyNode.setNetwork(this);
         if (containsNode(dummyNode)) {
             return nodes.get(nodeI.get(dummyNode).nodeIndex);
         }
@@ -342,7 +356,7 @@ public class FastNetwork implements Network {
             } else {
                 //if the network is not directed inLinks = outLinks
                 if (index.inLinks != null) {
-                    result.addAll(index.outLinks);
+                    result.addAll(index.inLinks);
                 }
             }
 
@@ -359,7 +373,7 @@ public class FastNetwork implements Network {
 
             //if the network is not directed inLinks = outLinks
             if (index.inLinks != null) {
-                result.addAll(index.outLinks);
+                result.addAll(index.inLinks);
             }
 
             return result;
@@ -415,13 +429,9 @@ public class FastNetwork implements Network {
         if (containsNode(node)) {
             Set<Node> neighbours = new HashSet<>();
             Collection<? extends Link> linksToNeighbours;
-            if (directed) {
-                //we need all the links
-                linksToNeighbours = getLinks(node);
-            } else {
-                //we just need the in links
-                linksToNeighbours = getInLinks(node);
-            }
+
+            linksToNeighbours = getLinks(node);
+
             for (Link link : linksToNeighbours) {
                 Node nodeToAdd = link.to().equals(node) ? link.from() : link.to();
                 neighbours.add(nodeToAdd);
@@ -530,7 +540,8 @@ public class FastNetwork implements Network {
         newNetwork.nodes = new ArrayList<>(nodes.size());
         // copy nodes
         for (Node node : nodes) {
-            newNetwork.nodes.add(node.getCopy());
+            Node nodeCopy = node.getCopy();
+            newNetwork.addNode(nodeCopy);
         }
         newNetwork.links = new ArrayList<>(links.size());
 
@@ -566,7 +577,9 @@ public class FastNetwork implements Network {
             if (indexi.outLinks != null) {
                 for (Link link : indexi.outLinks) {
                     if (directed || link.from().equals(nodei)) {
-                        newNetwork.addLink(link.getCopy());
+                        Link linkCopy = link.getCopy();
+                        linkCopy.setNetwork(newNetwork);
+                        newNetwork.addLink(linkCopy);
                     }
                 }
             }

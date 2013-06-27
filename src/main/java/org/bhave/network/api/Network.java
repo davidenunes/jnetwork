@@ -76,14 +76,9 @@ public interface Network extends Serializable {
     boolean addNode(Node node);
 
     /**
-     * Adds a Link to the graph. Fails if the Link is already in the Network, if
-     * the nodes do not exist in the network or if any of these elements is
-     * null. <br /> <br /> <b>Note:</b> the network is both <b>directed</b> and
-     * <b>undirected</b> by default. What this means is that if you wish to work
-     * with a directed network, the order of the given nodes dictates the
-     * direction of the link. If you wish to work with an undirected network,
-     * the order is not important, just use the methods that do not take link
-     * direction in consideration.
+     * Adds a Link to the graph. Fails if the Link is already in the Network,
+     * or if any of these elements is
+     * null. <br /> <br />
      *
      * @param node1 an existing node within the network
      * @param node2 an existing node within the network
@@ -91,6 +86,20 @@ public interface Network extends Serializable {
      * @return link a link if add is successful, null otherwise
      */
     Link addLink(Node node1, Node node2);
+    
+    
+    
+    /**
+     * Adds a Link to the graph. Fails if the Link is already in the Network,
+     * or if any of these elements is
+     * null. <br /> <br /> 
+     *
+     * @param link a link to be added to the network, should be created with 
+     * network.createLink(node1,node2)
+     *
+     * @return link a link if add is successful, null otherwise
+     */
+    boolean addLink(Link link);
 
     /**
      * Removes a node from the network. Fails if the node does not exist or if
@@ -328,4 +337,12 @@ public interface Network extends Serializable {
      * @see Link
      */
     Link createLink(Node from, Node to);
+
+    /**
+     * Creates a new Network instance which is a deep copy of the current
+     * network object.
+     *
+     * @return a network
+     */
+    Network getCopy();
 }

@@ -55,6 +55,7 @@ public class SimpleNode implements Node {
         for (Object key : node.properties.keySet()) {
             this.properties.put(key, node.properties.get(key));
         }
+        
     }
 
     @Override
