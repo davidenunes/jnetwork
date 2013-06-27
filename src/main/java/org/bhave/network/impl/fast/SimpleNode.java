@@ -55,7 +55,7 @@ public class SimpleNode implements Node {
         for (Object key : node.properties.keySet()) {
             this.properties.put(key, node.properties.get(key));
         }
-        
+
     }
 
     @Override
@@ -81,10 +81,9 @@ public class SimpleNode implements Node {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + id;
-        return result;
+        int hash = 5;
+        hash = 97 * hash + this.id;
+        return hash;
     }
 
     @Override

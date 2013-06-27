@@ -22,17 +22,14 @@
  */
 package org.bhave.network.impl.fast;
 
-import com.google.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
-
-import org.apache.commons.collections.map.MultiKeyMap;
-import org.apache.commons.lang3.tuple.Pair;
 import org.bhave.network.api.DirectedNetwork;
 import org.bhave.network.api.Link;
 import org.bhave.network.api.Network;
@@ -56,6 +53,7 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
     ArrayList<Node> nodes;
     // store links
     ArrayList<Link> links;
+    HashMap<NodePairKey, Set<Link>> nodePairI;
 
     // constructors
     public FastNetwork() {
@@ -68,6 +66,7 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
         links = new ArrayList<>();
         nodeI = new HashMap<>();
         linkI = new HashMap<>();
+        nodePairI = new HashMap<>();
     }
 
     public FastNetwork(FastNetwork other) {
@@ -140,11 +139,36 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
         int linkToIndex = inIndex.inLinks.size() - 1;
 
         // Create a link index entry
-        LinkIndex li = new LinkIndex(links.size() - 1, linkFromIndex,
-                linkToIndex);
+        LinkIndex li = new LinkIndex(links.size() - 1, outIndex,
+                inIndex);
         linkI.put(link, li);
 
+        //add link to node pair index
+        addNodePairEntry(link);
+
         return true;
+    }
+
+    private void addNodePairEntry(Link link) {
+        NodePairKey k = new NodePairKey(link.from(), link.to());
+
+        Set<Link> linkset;
+        if (!nodePairI.containsKey(k)) {
+            linkset = new HashSet<>();
+            nodePairI.put(k, linkset);
+        } else {
+            linkset = nodePairI.get(k);
+        }
+        linkset.add(link);
+    }
+
+    private void removeLinkFromNodePairI(Link link) {
+        NodePairKey k = new NodePairKey(link.from(), link.to());
+        Set<Link> linkset = nodePairI.get(k);
+        linkset.remove(link);
+        if (linkset.isEmpty()) {
+            nodePairI.remove(k);
+        }
     }
 
     /**
@@ -197,6 +221,12 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
 
     @Override
     public boolean removeNode(Node node) {
+        //get neighbours to delete the node to link index
+        for (Node neighbour : getNeighbours(node)) {
+            NodePairKey k = new NodePairKey(node, neighbour);
+            nodePairI.remove(k);
+        }
+
         //remove node from nodeList
         if (containsNode(node)) {
             //remove node from nodes list
@@ -255,12 +285,20 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
 
         //remove from the out links first
         if (directed) {
-            fromIndex.outLinks.remove(index.fromIndex);
-            toIndex.outLinks.remove(index.toIndex);
+            if (fromIndex.outLinks != null) {
+                fromIndex.outLinks.remove(index.fromIndex);
+            }
+            if (toIndex.outLinks != null) {
+                toIndex.outLinks.remove(index.toIndex);
+            }
         }
         //remove the links from the in links
-        fromIndex.inLinks.remove(index.fromIndex);
-        toIndex.inLinks.remove(index.toIndex);
+        if (fromIndex.inLinks != null) {
+            fromIndex.inLinks.remove(index.fromIndex);
+        }
+        if (toIndex.inLinks != null) {
+            toIndex.inLinks.remove(index.toIndex);
+        }
 
         //delete the link index entry, no longer needed
         linkI.remove(link);
@@ -270,6 +308,7 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
     public boolean removeNode(int id) {
         //the equals works with the id so use this to check for its existence
         SimpleNode dummyNode = new SimpleNode(id);
+        dummyNode.setNetwork(this);
 
         return removeNode(dummyNode);
     }
@@ -282,6 +321,10 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
 
             //delete link from node indexes and delete link index
             deleteLinkFromIndex(link);
+
+            //delete link from nodePair Entry
+            removeLinkFromNodePairI(link);
+
             return true;
         }
         return false;
@@ -323,8 +366,12 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
     }
 
     @Override
-    public Link getLink(Node node1, Node node2) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Collection<? extends Link> getLinks(Node node1, Node node2) {
+        NodePairKey k = new NodePairKey(node1, node2);
+        if (nodePairI.containsKey(k)) {
+            return new HashSet<>(nodePairI.get(k));
+        }
+        return new HashSet<>();
     }
 
     @Override
@@ -444,6 +491,7 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
     @Override
     public Collection<? extends Node> getNeighbours(int id) {
         SimpleNode dummyNode = new SimpleNode(id);
+        dummyNode.setNetwork(this);
         return getNeighbours(dummyNode);
     }
 
@@ -478,13 +526,9 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
     }
 
     @Override
-    public boolean containsLink(Node node1, Node node2) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean containsDirectedLink(Node node1, Node node2) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public boolean containsLinks(Node node1, Node node2) {
+        NodePairKey k = new NodePairKey(node1, node2);
+        return nodePairI.containsKey(k);
     }
 
     /**
@@ -518,11 +562,11 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
         //index of this link in the nodeIndex in or out array of links
 
         public int linkIndex;
-        public int fromIndex;
-        public int toIndex;
+        public NodeIndex fromIndex;
+        public NodeIndex toIndex;
 
-        public LinkIndex(final int linkIndex, final int fromIndex,
-                final int toIndex) {
+        public LinkIndex(final int linkIndex, final NodeIndex fromIndex,
+                final NodeIndex toIndex) {
             this.linkIndex = linkIndex;
             this.fromIndex = fromIndex;
             this.toIndex = toIndex;
@@ -585,5 +629,42 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
             }
         }
         return newNetwork;
+    }
+
+    private static class NodePairKey {
+
+        private Node from;
+        private Node to;
+
+        public NodePairKey(Node from, Node to) {
+            this.from = from;
+            this.to = to;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 5;
+            int hash1 = 29 * hash + Objects.hashCode(this.from);
+
+            int hash2 = 29 * hash + Objects.hashCode(this.to);
+
+            return hash1 * hash2;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final NodePairKey other = (NodePairKey) obj;
+            if ((Objects.equals(this.from, other.from) && Objects.equals(this.to, other.to))
+                    || (Objects.equals(this.from, other.to) && Objects.equals(this.to, other.from))) {
+                return true;
+            }
+            return false;
+        }
     }
 }

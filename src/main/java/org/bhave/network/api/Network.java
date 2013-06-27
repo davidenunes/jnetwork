@@ -76,9 +76,8 @@ public interface Network extends Serializable {
     boolean addNode(Node node);
 
     /**
-     * Adds a Link to the graph. Fails if the Link is already in the Network,
-     * or if any of these elements is
-     * null. <br /> <br />
+     * Adds a Link to the graph. Fails if the Link is already in the Network, or
+     * if any of these elements is null. <br /> <br />
      *
      * @param node1 an existing node within the network
      * @param node2 an existing node within the network
@@ -86,15 +85,12 @@ public interface Network extends Serializable {
      * @return link a link if add is successful, null otherwise
      */
     Link addLink(Node node1, Node node2);
-    
-    
-    
+
     /**
-     * Adds a Link to the graph. Fails if the Link is already in the Network,
-     * or if any of these elements is
-     * null. <br /> <br /> 
+     * Adds a Link to the graph. Fails if the Link is already in the Network, or
+     * if any of these elements is null. <br /> <br />
      *
-     * @param link a link to be added to the network, should be created with 
+     * @param link a link to be added to the network, should be created with
      * network.createLink(node1,node2)
      *
      * @return link a link if add is successful, null otherwise
@@ -172,7 +168,7 @@ public interface Network extends Serializable {
      * @return an existing link, null if the link does not exist or any given
      * nodes are null.
      */
-    Link getLink(Node node1, Node node2);
+    Collection<? extends Link> getLinks(Node node1, Node node2);
 
     /**
      * Returns a collection of links attached to the given node.
@@ -308,19 +304,7 @@ public interface Network extends Serializable {
      * @return true if the link is in the network, false if the link is not in
      * the network or if it is null.
      */
-    boolean containsLink(Node node1, Node node2);
-
-    /**
-     * Returns true of the given link is in the network. False otherwise or if
-     * the link is null.
-     *
-     * @param node1 one of the nodes for the link
-     * @param node2 one of the nodes for the link
-     *
-     * @return true if the link is in the network, false if the link is not in
-     * the network or if it is null.
-     */
-    boolean containsDirectedLink(Node node1, Node node2);
+    boolean containsLinks(Node node1, Node node2);
 
     /**
      * Creates a new node that can be added to the network.

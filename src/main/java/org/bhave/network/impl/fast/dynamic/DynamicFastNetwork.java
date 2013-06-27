@@ -20,23 +20,19 @@
  * the b-have network library. If not, see
  * <http://www.gnu.org/licenses/gpl.html>.
  */
-package org.bhave.network.impl.hash.dynamic;
+package org.bhave.network.impl.fast.dynamic;
 
+import com.google.inject.Inject;
 import java.util.Collection;
 import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
-
-import org.apache.commons.lang3.tuple.Pair;
 import org.bhave.network.api.DynamicNetwork;
 import org.bhave.network.api.Link;
 import org.bhave.network.api.Network;
 import org.bhave.network.api.Node;
-import org.bhave.network.impl.fast.SimpleLink;
-import org.bhave.network.impl.fast.SimpleNode;
-
-import com.google.inject.Inject;
 import org.bhave.network.impl.fast.FastNetwork;
+import org.bhave.network.impl.fast.SimpleNode;
 
 /**
  * Implementation of {@link DynamicNetwork dynamic network}. This is a simple
@@ -133,9 +129,9 @@ public class DynamicFastNetwork implements DynamicNetwork {
     }
 
     @Override
-    public Link getLink(Node node1, Node node2) {
+    public Collection<? extends Link> getLinks(Node node1, Node node2) {
         Network network = networks.get(currentTime);
-        return network.getLink(node1, node2);
+        return network.getLinks(node1, node2);
     }
 
     @Override
@@ -223,13 +219,8 @@ public class DynamicFastNetwork implements DynamicNetwork {
     }
 
     @Override
-    public boolean containsLink(Node node1, Node node2) {
-        return networks.get(currentTime).containsLink(node1, node2);
-    }
-
-    @Override
-    public boolean containsDirectedLink(Node node1, Node node2) {
-        return networks.get(currentTime).containsDirectedLink(node1, node2);
+    public boolean containsLinks(Node node1, Node node2) {
+        return networks.get(currentTime).containsLinks(node1, node2);
     }
 
     /**

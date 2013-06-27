@@ -197,10 +197,41 @@ public class FastNetworkTest {
 
     @Test
     public void testRemoveLink_int() {
+        Network network = injector.getInstance(Network.class);
+
+        assertNotNull(network);
+        Node node1 = network.createNode();
+        Node node2 = network.createNode();
+
+        network.addNode(node1);
+        network.addNode(node2);
+
+        assertTrue(network.getNeighbours(node1).isEmpty());
+
+        Link link = network.addLink(node1, node2);
+        assertFalse(network.getNeighbours(node1).isEmpty());
+        assertEquals(1, network.getLinkCount());
+        network.removeLink(link.getID());
+        assertTrue(network.getLinks().isEmpty());
+
+        assertTrue(network.getNeighbours(node1).isEmpty());
     }
 
     @Test
     public void testGetNode() {
+        Network network = injector.getInstance(Network.class);
+
+        assertNotNull(network);
+        Node node1 = network.createNode();
+        Node node2 = network.createNode();
+
+        int beforeNodeCount = network.getNodeCount();
+
+        network.addNode(node1);
+
+        int afterNodeCount = network.getNodeCount();
+
+        assertTrue(beforeNodeCount < afterNodeCount);
     }
 
     @Test
@@ -325,26 +356,63 @@ public class FastNetworkTest {
 
     @Test
     public void testGetNeighbours_Node() {
+        Network network = injector.getInstance(DirectedNetwork.class);
+
+        assertNotNull(network);
+        Node node1 = network.createNode();
+        Node node2 = network.createNode();
+
+        network.addNode(node1);
+        network.addNode(node2);
+
+        Link link = network.addLink(node1, node2);
+
+        assertSame(network.getNeighbours(node1).iterator().next(), node2);
     }
 
     @Test
     public void testGetNeighbours_int() {
+        Network network = injector.getInstance(DirectedNetwork.class);
+
+        assertNotNull(network);
+        Node node1 = network.createNode();
+        Node node2 = network.createNode();
+
+        network.addNode(node1);
+        network.addNode(node2);
+
+        Link link = network.addLink(node1, node2);
+
+        assertSame(network.getNeighbours(node1.getID()).iterator().next(), node2);
     }
 
     @Test
     public void testGetNodes_0args() {
+        Network network = injector.getInstance(DirectedNetwork.class);
+
+        assertNotNull(network);
+        Node node1 = network.createNode();
+        Node node2 = network.createNode();
+
+        network.addNode(node1);
+        network.addNode(node2);
+
+        assertEquals(2, network.getNodes().size());
     }
 
     @Test
     public void testGetLinks_0args() {
-    }
+        Network network = injector.getInstance(DirectedNetwork.class);
 
-    @Test
-    public void testGetNodes_int() {
-    }
+        assertNotNull(network);
+        Node node1 = network.createNode();
+        Node node2 = network.createNode();
 
-    @Test
-    public void testGetNodes_Link() {
+        network.addNode(node1);
+        network.addNode(node2);
+
+        Link link = network.addLink(node1, node2);
+        assertEquals(1, network.getLinks().size());
     }
 
     @Test
@@ -369,14 +437,24 @@ public class FastNetworkTest {
     }
 
     @Test
-    public void testContainsLink_Link() {
-    }
+    public void testContainsLinks_Node_Node() {
+        Network network = injector.getInstance(DirectedNetwork.class);
 
-    @Test
-    public void testContainsLink_Node_Node() {
-    }
+        assertNotNull(network);
+        Node node1 = network.createNode();
+        Node node2 = network.createNode();
 
-    @Test
-    public void testContainsDirectedLink() {
+        network.addNode(node1);
+        network.addNode(node2);
+
+        Link link = network.addLink(node1, node2);
+        assertTrue(network.containsLinks(node1, node2));
+        assertEquals(1, network.getLinks(node1, node2).size());
+
+        network.removeLink(link);
+
+        assertFalse(network.containsLinks(node1, node2));
+        assertEquals(0, network.getLinks(node1, node2).size());
+
     }
 }

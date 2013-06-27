@@ -28,7 +28,7 @@ import org.apache.commons.math3.random.MersenneTwister;
 import org.apache.commons.math3.random.RandomGenerator;
 import org.bhave.network.api.DynamicNetwork;
 import org.bhave.network.api.Network;
-import org.bhave.network.impl.hash.dynamic.DynamicFastNetwork;
+import org.bhave.network.impl.fast.dynamic.DynamicFastNetwork;
 import org.bhave.network.model.BAForestModel;
 import org.bhave.network.model.BAModel;
 import org.bhave.network.model.ERModel;
