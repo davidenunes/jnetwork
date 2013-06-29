@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.bhave</groupId>
 	<artifactId>bhave.network</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.5-SNAPSHOT</version>
 	<name>Java Network API</name>
 	<description>A simple Java framework to deal with graph / network data structures</description>
 	<dependencies>
