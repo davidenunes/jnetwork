@@ -99,21 +99,9 @@ public class DynamicFastNetwork implements DynamicNetwork {
     }
 
     @Override
-    public boolean removeNode(int id) {
-        Network network = networks.get(currentTime);
-        return network.removeLink(id);
-    }
-
-    @Override
     public boolean removeLink(Link link) {
         Network network = networks.get(currentTime);
         return network.removeLink(link);
-    }
-
-    @Override
-    public boolean removeLink(int id) {
-        Network network = networks.get(currentTime);
-        return network.removeLink(id);
     }
 
     @Override
@@ -168,12 +156,6 @@ public class DynamicFastNetwork implements DynamicNetwork {
     public Collection<? extends Node> getNeighbours(Node node) {
         Network network = networks.get(currentTime);
         return network.getNeighbours(node);
-    }
-
-    @Override
-    public Collection<? extends Node> getNeighbours(int id) {
-        Network network = networks.get(currentTime);
-        return network.getNeighbours(id);
     }
 
     @Override

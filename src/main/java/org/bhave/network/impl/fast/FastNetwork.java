@@ -41,7 +41,7 @@ import org.bhave.network.api.UndirectedNetwork;
  *
  * @author Davide Nunes
  */
-public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network {
+public class FastNetwork implements DirectedNetwork, UndirectedNetwork {
 
     private static final long serialVersionUID = 1L;
     boolean directed;
@@ -418,15 +418,6 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
     }
 
     @Override
-    public boolean removeNode(int id) {
-        //the equals works with the id so use this to check for its existence
-        SimpleNode dummyNode = new SimpleNode(id);
-        dummyNode.setNetwork(this);
-
-        return removeNode(dummyNode);
-    }
-
-    @Override
     public boolean removeLink(Link link) {
         if (containsLink(link)) {
             //remove from links
@@ -439,18 +430,6 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
             removeLinkFromNodePairI(link);
 
             return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean removeLink(int id) {
-        SimpleLink dummyLink = new SimpleLink(id, null, null);
-        dummyLink.setNetwork(this);
-
-        if (containsLink(dummyLink)) {
-            Link linkToRemove = links.get(linkI.get(dummyLink).linkIndex);
-            return removeLink(linkToRemove);
         }
         return false;
     }
@@ -599,13 +578,6 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork, Network 
             return neighbours;
         }
         return new HashSet<>();
-    }
-
-    @Override
-    public Collection<? extends Node> getNeighbours(int id) {
-        SimpleNode dummyNode = new SimpleNode(id);
-        dummyNode.setNetwork(this);
-        return getNeighbours(dummyNode);
     }
 
     @Override

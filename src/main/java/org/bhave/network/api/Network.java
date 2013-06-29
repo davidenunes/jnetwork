@@ -23,9 +23,9 @@
 package org.bhave.network.api;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.bhave.network.NetworkModule;
 
 /**
@@ -43,7 +43,8 @@ import org.bhave.network.NetworkModule;
  *
  * <br /> <br /> <b>Note:</b> by creating a new node or link you are not adding
  * them to the network. You still have to use {@link #addNode(Node) addNode} or
- * {@link #addLink(Node, Node, Link) addLink}. </p> <br /> <br />
+ * {@link #addLink(Link) addLink} or {@link #addLink(Link) addLink} . </p> <br
+ * /> <br />
  *
  * <h2>Getting a Network Instance</h2> <p> This library uses <a
  * href="http://code.google.com/p/google-guice/">Guice</a> to deal with network
@@ -53,7 +54,19 @@ import org.bhave.network.NetworkModule;
  *
  * <code>Injector injector = Guice.createInjector(new NetworkModule());</code><br
  * />
- * <code>Network network = injector.getInstance(Network.class);</code>
+ * <code>Network network = injector.getInstance(Network.class);</code> <p> The
+ * <b>default implementation</b> for a network provides an <b>undirected
+ * network</b>. If you specifically require a directed or undirected network you
+ * can use the injector to get these as follows: <br>
+ *
+ * <code>Network network = injector.getInstance(DirectedNetwork.class);</code><br/>
+ * <code>Network network = injector.getInstance(UndirectedNetwork.class);</code><br/>
+ *
+ * <br/> You can encapsulate the instances in {@link Network} objects or
+ * directly use {@link DirectedNetwork} or {@link UndirectedNetwork} if this
+ * helps with the code readability.
+ *
+ * </p>
  *
  * <br /> <br /> </p>
  *
@@ -66,8 +79,8 @@ import org.bhave.network.NetworkModule;
 public interface Network extends Serializable {
 
     /**
-     * Adds a node to the network. Fails if the node already exists or if the
-     * node is null.
+     * Adds a node to the network. Returns false if the node already exists or
+     * if the node is null.
      *
      * @param node the node to be added
      *
@@ -93,6 +106,9 @@ public interface Network extends Serializable {
      * @param link a link to be added to the network, should be created with
      * network.createLink(node1,node2)
      *
+     * If the nodes in the link do not exist in the network, these are added
+     * automatically.
+     *
      * @return link a link if add is successful, null otherwise
      */
     boolean addLink(Link link);
@@ -109,19 +125,6 @@ public interface Network extends Serializable {
     boolean removeNode(Node node);
 
     /**
-     * Removes a node from the network based on its ID. Fails if the node does
-     * not exist.
-     *
-     * <b>Note:</b>removing a node with existing links, also removes these
-     * links.
-     *
-     * @param id the id of the node to be removed
-     *
-     * @return true if remove is successful, false otherwise
-     */
-    boolean removeNode(int id);
-
-    /**
      * Removes a link from the network. Fails if the link does not exist of if
      * the link is null.
      *
@@ -130,16 +133,6 @@ public interface Network extends Serializable {
      * @return true if remove is successful, false otherwise
      */
     boolean removeLink(Link link);
-
-    /**
-     * Removes a link from the network based on its id. Fails if the link does
-     * not exist.
-     *
-     * @param id the id of the link to be removed
-     *
-     * @return true if remove is successful, false otherwise
-     */
-    boolean removeLink(int id);
 
     /**
      * Returns a node by its Integer id or null if the node does not exist.
@@ -192,6 +185,7 @@ public interface Network extends Serializable {
      */
     Collection<? extends Link> getOutLinks(Node node);
 
+
     /**
      * Returns a collection of links coming <b>to</b> the given node from other
      * nodes. You should use this method if you are using the network as a
@@ -204,6 +198,7 @@ public interface Network extends Serializable {
      */
     Collection<? extends Link> getInLinks(Node node);
 
+
     /**
      * Returns a collection of nodes attached to link coming from the given
      * node.
@@ -214,6 +209,7 @@ public interface Network extends Serializable {
      */
     Collection<? extends Node> getSuccessors(Node node);
 
+
     /**
      * Returns a collection of nodes attached to links coming to the given node.
      *
@@ -222,6 +218,7 @@ public interface Network extends Serializable {
      * within the network or is null
      */
     Collection<? extends Node> getPredecessors(Node node);
+
 
     /**
      * Returns a collection of nodes attached to the given node by some link.
@@ -233,16 +230,6 @@ public interface Network extends Serializable {
      */
     Collection<? extends Node> getNeighbours(Node node);
 
-    /**
-     * Returns a collection of nodes attached to the node with the given id by
-     * some link.
-     *
-     * @param id the id of the node we want the neighbours from.
-     *
-     * @return a collection of nodes or null if the given node does not exist
-     * within the network or is null
-     */
-    Collection<? extends Node> getNeighbours(int id);
 
     /**
      * Returns a collection of all the nodes in the network.
@@ -250,6 +237,7 @@ public interface Network extends Serializable {
      * @return a collection of nodes
      */
     Collection<? extends Node> getNodes();
+
 
     /**
      * Returns a collection of all the links in the network.

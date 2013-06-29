@@ -211,7 +211,7 @@ public class FastNetworkTest {
         Link link = network.addLink(node1, node2);
         assertFalse(network.getNeighbours(node1).isEmpty());
         assertEquals(1, network.getLinkCount());
-        network.removeLink(link.getID());
+        network.removeLink(link);
         assertTrue(network.getLinks().isEmpty());
 
         assertTrue(network.getNeighbours(node1).isEmpty());
@@ -383,7 +383,7 @@ public class FastNetworkTest {
 
         Link link = network.addLink(node1, node2);
 
-        assertSame(network.getNeighbours(node1.getID()).iterator().next(), node2);
+        assertSame(network.getNeighbours(node1).iterator().next(), node2);
     }
 
     @Test
