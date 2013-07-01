@@ -8,10 +8,10 @@ which is a dependency injection framework from *Google* that allows for code mod
 
 ## Latest releases
 ### Nightly builds
-Current version is 0.0.3-SNAPSHOT
-* [bhave.network-0.0.3-SNAPSHOT.jar](http://dl.dropbox.com/u/336879/Projects/Releases/bhave.network-0.0.3-SNAPSHOT.jar)
-* [bhave.network-0.0.3-SNAPSHOT-sources.jar](http://dl.dropbox.com/u/336879/Projects/Releases/bhave.network-0.0.3-SNAPSHOT-sources.jar)
-* [bhave.network-0.0.3-SNAPSHOT-javadoc.jar](http://dl.dropbox.com/u/336879/Projects/Releases/bhave.network-0.0.3-SNAPSHOT-javadoc.jar)
+Current version is 0.5-SNAPSHOT
+* [bhave.network-0.5-SNAPSHOT.jar](https://dl.dropboxusercontent.com/u/336879/Projects/Releases/bhave.network-0.5-SNAPSHOT-jar-with-dependencies.jar)
+* [bhave.network-0.5-SNAPSHOT-sources.jar](https://dl.dropboxusercontent.com/u/336879/Projects/Releases/bhave.network-0.5-SNAPSHOT-sources.jar)
+* [bhave.network-0.5-SNAPSHOT-javadoc.jar](https://dl.dropboxusercontent.com/u/336879/Projects/Releases/bhave.network-0.5-SNAPSHOT-javadoc.jar)
 
 
 
@@ -43,18 +43,35 @@ Node node1 = network.createNode();
 Node node2 = network.createNode();
 
 //create a new link 
-Link link = network.createLink();
+Link link = network.createLink(node1, node2);
 
 //add nodes to the network
 network.addNode(node1);
 network.addNode(node2);
 
 //add a new link from node1 to node2
-network.addLink(node1,node2, link);
+network.addLink(link);
+//or
+network.addLink(node1,node2);
 ```
 
 Thats pretty much it. You can now add more nodes, return links between existing nodes, get the neighbours of a 
 given node, etc.
+
+**Note:** a network instance, is *undirected* by default. This means that the direction of the links is ignored. 
+If you want to work explicitly with *directed* or *undirected* networks you can do it as follows:
+
+```java
+//get a directed network
+DirectedNetwork network = injector.getInstance(DirectedNetwork.class);
+//get an undirected network instance
+UndirectedNetwork network = injector.getInstance(UndirectedNetwork.class);
+
+//you can encapsulate both of these in a Network object
+Network network = injector.getInstance(DirectedNetwork.class);
+```
+The `DirectedNetwork` and `UndirectedNetwork` interfaces are just tagging interfaces. The methods are exactly the same
+as a the `Network` interface, the instances created like this just behave differently.
 
 ### Dynamic Networks
 A `DynamicNetwork` works exactly as a normal `Network` object with the addition of discrete time instances. By default, these network instances are created with a time instance `t = 0`. You can use all the operations from `Network`, these will be
