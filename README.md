@@ -42,12 +42,13 @@ instance.
 Node node1 = network.createNode();
 Node node2 = network.createNode();
 
-//create a new link 
-Link link = network.createLink(node1, node2);
 
 //add nodes to the network
 network.addNode(node1);
 network.addNode(node2);
+
+//create a new link 
+Link link = network.createLink(node1, node2);
 
 //add a new link from node1 to node2
 network.addLink(link);
