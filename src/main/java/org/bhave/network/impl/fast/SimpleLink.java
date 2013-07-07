@@ -47,6 +47,7 @@ public class SimpleLink implements Link {
         this.from = from;
         this.to = to;
         properties = new Properties();
+        this.value = 1;
 
     }
 

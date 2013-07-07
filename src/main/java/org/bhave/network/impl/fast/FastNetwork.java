@@ -616,6 +616,11 @@ public class FastNetwork implements DirectedNetwork, UndirectedNetwork {
         return nodePairI.containsKey(k);
     }
 
+    @Override
+    public boolean isDirected() {
+        return directed;
+    }
+
     /**
      * Indexes Network Links. Each node has a set of in links and out links. If
      * the network is undirected all the links are put in the in list

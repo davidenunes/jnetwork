@@ -79,6 +79,13 @@ import org.bhave.network.NetworkModule;
 public interface Network extends Serializable {
 
     /**
+     * Returns true if the network is directed
+     *
+     * @return true or false if the network is directed or not
+     */
+    boolean isDirected();
+
+    /**
      * Adds a node to the network. Returns false if the node already exists or
      * if the node is null.
      *
@@ -185,7 +192,6 @@ public interface Network extends Serializable {
      */
     Collection<? extends Link> getOutLinks(Node node);
 
-
     /**
      * Returns a collection of links coming <b>to</b> the given node from other
      * nodes. You should use this method if you are using the network as a
@@ -198,7 +204,6 @@ public interface Network extends Serializable {
      */
     Collection<? extends Link> getInLinks(Node node);
 
-
     /**
      * Returns a collection of nodes attached to link coming from the given
      * node.
@@ -209,7 +214,6 @@ public interface Network extends Serializable {
      */
     Collection<? extends Node> getSuccessors(Node node);
 
-
     /**
      * Returns a collection of nodes attached to links coming to the given node.
      *
@@ -218,7 +222,6 @@ public interface Network extends Serializable {
      * within the network or is null
      */
     Collection<? extends Node> getPredecessors(Node node);
-
 
     /**
      * Returns a collection of nodes attached to the given node by some link.
@@ -230,14 +233,12 @@ public interface Network extends Serializable {
      */
     Collection<? extends Node> getNeighbours(Node node);
 
-
     /**
      * Returns a collection of all the nodes in the network.
      *
      * @return a collection of nodes
      */
     Collection<? extends Node> getNodes();
-
 
     /**
      * Returns a collection of all the links in the network.

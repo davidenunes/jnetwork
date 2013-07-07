@@ -262,4 +262,9 @@ public class DynamicFastNetwork implements DynamicNetwork {
     public boolean addLink(Link link) {
         return networks.get(currentTime).addLink(link);
     }
+
+    @Override
+    public boolean isDirected() {
+        return networks.get(currentTime).isDirected();
+    }
 }
