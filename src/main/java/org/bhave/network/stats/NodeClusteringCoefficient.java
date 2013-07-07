@@ -9,8 +9,15 @@ import org.bhave.network.api.Network;
 import org.bhave.network.api.Node;
 
 /**
+ * Local Clustering Coefficient
  *
- * @author davide
+ * Computer for a node that belongs to a specific network. The network is
+ * extracted by using {@link Node#getNetwork()}
+ *
+ * if the node does not belong to a {@link Network},
+ * {@link #getValue(org.bhave.network.api.Node) trows an exception informing this.
+ *
+ * @author Davide Nunes
  */
 public class NodeClusteringCoefficient {
 
