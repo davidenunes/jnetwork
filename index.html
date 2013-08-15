@@ -1,0 +1,183 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Java Lightweight Network Library by b-have</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Java Lightweight Network Library</h1>
+        <p class="header">A simple lightweight network / graph library</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/b-have/bhave.network/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/b-have/bhave.network/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/b-have/bhave.network">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/b-have">b-have</a></p>
+
+
+      </header>
+      <section>
+        <h1>
+<a name="b-have-network-library" class="anchor" href="#b-have-network-library"><span class="octicon octicon-link"></span></a>B-Have Network Library</h1>
+
+<p>A simple lightweight <strong>network / graph library</strong> written in Java. This is a software library that provides a simple set of tools 
+to model and analyse data that can be represented as a graph or network. It provides facilities to treat a network
+either as directed or undirected using the same simple <code>Network</code> API. </p>
+
+<p>This library hides the implementation details by using the <a href="http://code.google.com/p/google-guice/">Guice</a>
+which is a dependency injection framework from <em>Google</em> that allows for code modularity.</p>
+
+<h2>
+<a name="latest-releases" class="anchor" href="#latest-releases"><span class="octicon octicon-link"></span></a>Latest releases</h2>
+
+<h3>
+<a name="nightly-builds" class="anchor" href="#nightly-builds"><span class="octicon octicon-link"></span></a>Nightly builds</h3>
+
+<p>Current version is 0.5-SNAPSHOT</p>
+
+<ul>
+<li><a href="https://dl.dropboxusercontent.com/u/336879/Projects/Releases/bhave.network-0.5-SNAPSHOT-jar-with-dependencies.jar">bhave.network-0.5-SNAPSHOT.jar</a></li>
+<li><a href="https://dl.dropboxusercontent.com/u/336879/Projects/Releases/bhave.network-0.5-SNAPSHOT-sources.jar">bhave.network-0.5-SNAPSHOT-sources.jar</a></li>
+<li><a href="https://dl.dropboxusercontent.com/u/336879/Projects/Releases/bhave.network-0.5-SNAPSHOT-javadoc.jar">bhave.network-0.5-SNAPSHOT-javadoc.jar</a></li>
+</ul><h2>
+<a name="a-brief-overview" class="anchor" href="#a-brief-overview"><span class="octicon octicon-link"></span></a>A brief overview</h2>
+
+<h3>
+<a name="hello-network" class="anchor" href="#hello-network"><span class="octicon octicon-link"></span></a>Hello Network</h3>
+
+<p>There are three basic building blocks in this network API: <code>Network</code> objects, <code>Node</code> objects and <code>Link</code> objects.</p>
+
+<p>To create <code>Network</code> instances we must first initialise our <a href="http://code.google.com/p/google-guice/">Guice</a> injector. 
+This entity is resposible for the construction of our library dependency graph. </p>
+
+<div class="highlight"><pre><span class="n">Injector</span> <span class="n">injector</span> <span class="o">=</span> <span class="n">Guice</span><span class="o">.</span><span class="na">createInjector</span><span class="o">(</span><span class="k">new</span> <span class="n">NetworkModule</span><span class="o">());</span>
+<span class="n">Network</span> <span class="n">network</span> <span class="o">=</span> <span class="n">injector</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">Network</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</pre></div>
+
+<p>We create an <code>Injector</code> instance from a <code>NetworkModule</code>. This module serves as a <em>Guice</em> configuration, telling 
+it how to resolve the various dependencies in the network library.</p>
+
+<p>To <strong>create a network</strong> we simply ask our injector for a instance of the <code>Network.class</code>. The injector 
+will do the rest and supply an instance from an implementation of <code>Network</code> ready to be used.</p>
+
+<p>The rest is pretty straight forward. The creation of new <code>Node</code> and <code>Link</code> objects is handled by the <code>Network</code>. 
+Bellow you can see a simple example of how one can create new nodes and links and add them to an existing network 
+instance.</p>
+
+<div class="highlight"><pre><span class="c1">//create new nodes</span>
+<span class="n">Node</span> <span class="n">node1</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="na">createNode</span><span class="o">();</span>
+<span class="n">Node</span> <span class="n">node2</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="na">createNode</span><span class="o">();</span>
+
+
+<span class="c1">//add nodes to the network</span>
+<span class="n">network</span><span class="o">.</span><span class="na">addNode</span><span class="o">(</span><span class="n">node1</span><span class="o">);</span>
+<span class="n">network</span><span class="o">.</span><span class="na">addNode</span><span class="o">(</span><span class="n">node2</span><span class="o">);</span>
+
+<span class="c1">//create a new link </span>
+<span class="n">Link</span> <span class="n">link</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="na">createLink</span><span class="o">(</span><span class="n">node1</span><span class="o">,</span> <span class="n">node2</span><span class="o">);</span>
+
+<span class="c1">//add a new link from node1 to node2</span>
+<span class="n">network</span><span class="o">.</span><span class="na">addLink</span><span class="o">(</span><span class="n">link</span><span class="o">);</span>
+<span class="c1">//or</span>
+<span class="n">network</span><span class="o">.</span><span class="na">addLink</span><span class="o">(</span><span class="n">node1</span><span class="o">,</span><span class="n">node2</span><span class="o">);</span>
+</pre></div>
+
+<p>Thats pretty much it. You can now add more nodes, return links between existing nodes, get the neighbours of a 
+given node, etc.</p>
+
+<p><strong>Note:</strong> a network instance, is <em>undirected</em> by default. This means that the direction of the links is ignored. 
+If you want to work explicitly with <em>directed</em> or <em>undirected</em> networks you can do it as follows:</p>
+
+<div class="highlight"><pre><span class="c1">//get a directed network</span>
+<span class="n">DirectedNetwork</span> <span class="n">network</span> <span class="o">=</span> <span class="n">injector</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">DirectedNetwork</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<span class="c1">//get an undirected network instance</span>
+<span class="n">UndirectedNetwork</span> <span class="n">network</span> <span class="o">=</span> <span class="n">injector</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">UndirectedNetwork</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+<span class="c1">//you can encapsulate both of these in a Network object</span>
+<span class="n">Network</span> <span class="n">network</span> <span class="o">=</span> <span class="n">injector</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">DirectedNetwork</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</pre></div>
+
+<p>The <code>DirectedNetwork</code> and <code>UndirectedNetwork</code> interfaces are just tagging interfaces. The methods are exactly the same
+as a the <code>Network</code> interface, the instances created like this just behave differently.</p>
+
+<h3>
+<a name="dynamic-networks" class="anchor" href="#dynamic-networks"><span class="octicon octicon-link"></span></a>Dynamic Networks</h3>
+
+<p>A <code>DynamicNetwork</code> works exactly as a normal <code>Network</code> object with the addition of discrete time instances. By default, these network instances are created with a time instance <code>t = 0</code>. You can use all the operations from <code>Network</code>, these will be
+associated with this time instance. Whenever you want to model a time change in your <code>DynamicNetwork</code>, you can use the 
+available operation <code>setCurrentTime(int)</code>. If this time instance didn't exist, a deep copy of the previous discrete time instance is created and you can now
+work with the network set to the given time. If the time you are switching to already existed, the <code>DynamicNetwork</code> just 
+alters its state so you can work on it.</p>
+
+<p>An example is given bellow: </p>
+
+<div class="highlight"><pre><span class="n">Injector</span> <span class="n">injector</span> <span class="o">=</span> <span class="n">Guice</span><span class="o">.</span><span class="na">createInjector</span><span class="o">(</span><span class="k">new</span> <span class="n">NetworkModule</span><span class="o">());</span>
+<span class="n">DynamicNetwork</span> <span class="n">network</span> <span class="o">=</span> <span class="n">injector</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">DynamicNetwork</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+<span class="c1">//create new nodes at t=0</span>
+<span class="n">Node</span> <span class="n">node1</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="na">createNode</span><span class="o">();</span>
+<span class="n">Node</span> <span class="n">node2</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="na">createNode</span><span class="o">();</span>
+
+<span class="n">network</span><span class="o">.</span><span class="na">setCurrentTime</span><span class="o">(</span><span class="mi">5</span><span class="o">);</span>
+
+<span class="c1">//create new node at t=5</span>
+<span class="n">Node</span> <span class="n">node3</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="na">createNode</span><span class="o">();</span>
+
+<span class="n">Network</span> <span class="n">networkT5</span> <span class="o">=</span> <span class="n">network</span><span class="o">;</span>
+</pre></div>
+
+<p>Note that the <code>DynamicNetwork</code> class is a subtype of <code>Network</code> hence you can use encapsulation here. 
+In the previous example <code>networkT5</code> contains an instance of a network. As you loose access to the time manipulation 
+mechanisms, you can only call methods from <code>Network</code> with this object. Moreover, all the alterations on <code>networkT5</code> are
+done for <code>t=5</code>. Also note that if you set the time on the <code>network</code> object, the time on <code>networkT5</code> is also changed as they 
+refer the same object.</p>
+
+<h2>
+<a name="licence" class="anchor" href="#licence"><span class="octicon octicon-link"></span></a>Licence</h2>
+
+<p>B-Have Network Library</p>
+
+<ul>
+<li>Copyright (C) 2013 Davide Nunes </li>
+<li>Authors : Davide Nunes <a href="mailto:davex.pt@gmail.com">davex.pt@gmail.com</a>
+</li>
+<li>
+<p>Website : <a href="http://bhaveproject.org">http://bhaveproject.org</a></p>
+
+<p>The b-have network library is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+
+<p>The b-have network library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+
+<p>You should have received a copy of the GNU General Public License
+along with the b-have network library.<br>
+If not, see <a href="http://www.gnu.org/licenses/gpl.html">GPL 3.0</a>.</p>
+</li>
+</ul>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
