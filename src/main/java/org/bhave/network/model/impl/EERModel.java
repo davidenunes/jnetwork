@@ -21,8 +21,8 @@ import com.google.inject.Provider;
  */
 public class EERModel extends AbstractNetworkModel implements ERModel {
 
-    public static final String PARAM_NUM_NODES = "numNodes";
-    public static final String PARAM_NUM_LINKS = "numLinks";
+    public static final String PARAM_NUM_NODES = P_NUM_NODES;
+    public static final String PARAM_NUM_LINKS = P_NUM_LINKS;
 
     @Inject
     public EERModel(Configuration config,

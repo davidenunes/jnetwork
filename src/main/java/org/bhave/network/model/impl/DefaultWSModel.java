@@ -26,9 +26,9 @@ import com.google.inject.Provider;
  */
 public class DefaultWSModel extends AbstractNetworkModel implements WSModel {
 
-    private static final String PARAM_NUM_NODES = "numNodes";
-    private static final String PARAM_DEGREE = "d";
-    private static final String PARAM_REATTACHP = "p";
+    private static final String PARAM_NUM_NODES = P_NUM_NODES;
+    private static final String PARAM_DEGREE = P_D;
+    private static final String PARAM_REATTACHP = P_P;
     private final KRegularModel regularModel;
 
     @Inject

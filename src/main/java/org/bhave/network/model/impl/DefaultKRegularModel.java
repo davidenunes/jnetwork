@@ -35,89 +35,88 @@ import com.google.inject.Provider;
 
 /**
  * Implementation of {@link KRegularModel}
- *
+ * 
  * @author Davide Nunes
  */
 public class DefaultKRegularModel extends AbstractNetworkModel implements
-        KRegularModel {
+		KRegularModel {
 
-    private static final String K_PARAM = "k";
-    private static final String NUM_NODES_PARAM = "numNodes";
+	private static final String K_PARAM = P_K;
+	private static final String NUM_NODES_PARAM = P_NUM_NODES;
 
-    @Inject
-    public DefaultKRegularModel(Configuration config,
-            RandomGenerator random,
-            Provider<Network> networkProvider) {
-        super(config, random, networkProvider);
-    }
+	@Inject
+	public DefaultKRegularModel(Configuration config, RandomGenerator random,
+			Provider<Network> networkProvider) {
+		super(config, random, networkProvider);
+	}
 
-    @Override
-    Configuration defaultConfiguration(Configuration config) {
-        config.setProperty(NUM_NODES_PARAM, 3);
-        config.setProperty(K_PARAM, 1);
-        config.setProperty(PARAM_SEED, System.currentTimeMillis());
-        return config;
-    }
+	@Override
+	Configuration defaultConfiguration(Configuration config) {
+		config.setProperty(NUM_NODES_PARAM, 3);
+		config.setProperty(K_PARAM, 1);
+		config.setProperty(PARAM_SEED, System.currentTimeMillis());
+		return config;
+	}
 
-    @Override
-    public void configure(Configuration configuration)
-            throws ConfigurationException {
+	@Override
+	public void configure(Configuration configuration)
+			throws ConfigurationException {
 
-        int numNodes = configuration.getInt(NUM_NODES_PARAM);
-        int k = configuration.getInt(K_PARAM);
+		int numNodes = configuration.getInt(NUM_NODES_PARAM);
+		int k = configuration.getInt(K_PARAM);
 
-        if (numNodes < 0) {
-            throw new ConfigurationException(NUM_NODES_PARAM + " must be > 0");
-        }
+		if (numNodes < 0) {
+			throw new ConfigurationException(NUM_NODES_PARAM + " must be > 0");
+		}
 
-        if (k < 1 || k > (numNodes / 2)) {
-            throw new ConfigurationException(K_PARAM
-                    + " must be within 1 <= k <= (" + NUM_NODES_PARAM + ") / 2");
-        }
+		if (k < 1 || k > (numNodes / 2)) {
+			throw new ConfigurationException(K_PARAM
+					+ " must be within 1 <= k <= (" + NUM_NODES_PARAM + ") / 2");
+		}
 
-    }
+	}
 
-    @Override
-    public void generateNetwork() {
+	@Override
+	public void generateNetwork() {
 
-        int numNodes = config.getInt(NUM_NODES_PARAM);
-        int k = config.getInt(K_PARAM);
+		int numNodes = config.getInt(NUM_NODES_PARAM);
+		int k = config.getInt(K_PARAM);
 
-        Node[] nodes = new Node[numNodes];
-        // add nodes to the network
-        for (int i = 0; i < numNodes; i++) {
-            Node newNode = network.createNode();
-            network.addNode(newNode);
-            nodes[i] = newNode;
-        }
+		Node[] nodes = new Node[numNodes];
+		// add nodes to the network
+		for (int i = 0; i < numNodes; i++) {
+			Node newNode = network.createNode();
+			network.addNode(newNode);
+			nodes[i] = newNode;
+		}
 
-        // use the existing random number generator to shuffle our nodeArray
-        RandomDataGenerator randomPerm = new RandomDataGenerator(random);
-        int[] perm = randomPerm.nextPermutation(numNodes, numNodes);
+		// use the existing random number generator to shuffle our nodeArray
+		RandomDataGenerator randomPerm = new RandomDataGenerator(random);
+		int[] perm = randomPerm.nextPermutation(numNodes, numNodes);
 
-        // create the regular network
-        for (int i = 0; i < numNodes; i++) {
-            int j = 1;
-            // add links to the next k neighbours without duplicated links
-            while (j <= k) {
-                Node n1 = nodes[perm[i]];
-                Node n2 = nodes[perm[(i + j) % numNodes]];
+		// create the regular network
+		for (int i = 0; i < numNodes; i++) {
+			int j = 1;
+			// add links to the next k neighbours without duplicated links
+			while (j <= k) {
+				Node n1 = nodes[perm[i]];
+				Node n2 = nodes[perm[(i + j) % numNodes]];
 
-                if (!network.containsLinks(n1, n2)) {
-                    network.addLink(n1, n2);
-                }
-                j++;
-            }
-        }
+				if (!network.containsLinks(n1, n2)) {
+					network.addLink(n1, n2);
+				}
+				j++;
+			}
+		}
 
-    }
+	}
 
-    @Override
-    public void configure(int numNodes, int k, long seed)
-            throws ConfigurationException {
-        config.setProperty(NUM_NODES_PARAM, numNodes);
-        config.setProperty(K_PARAM, k);
-        config.setProperty(PARAM_SEED, seed);
-        this.configure(config);
-    }
+	@Override
+	public void configure(int numNodes, int k, long seed)
+			throws ConfigurationException {
+		config.setProperty(NUM_NODES_PARAM, numNodes);
+		config.setProperty(K_PARAM, k);
+		config.setProperty(PARAM_SEED, seed);
+		this.configure(config);
+	}
 }

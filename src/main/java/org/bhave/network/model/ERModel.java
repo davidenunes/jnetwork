@@ -56,6 +56,10 @@ import org.apache.commons.configuration.ConfigurationException;
  * 
  */
 public interface ERModel extends NetworkModel {
+        public static final String P_NUM_NODES = "numNodes";
+        public static final String P_NUM_LINKS = "numLinks";
+    
+    
 	/**
 	 * Configures a model to produce a network with a given number of nodes and
 	 * links.
