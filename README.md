@@ -7,15 +7,15 @@ This library hides the implementation details by using the [Guice](http://code.g
 which is a dependency injection framework from *Google* that allows for code modularity.
 
 ## Latest releases
-### Nightly builds
-Current version is 0.5-SNAPSHOT
-* [bhave.network-0.5-SNAPSHOT.jar](https://dl.dropboxusercontent.com/u/336879/Projects/Releases/bhave.network-0.5-SNAPSHOT-jar-with-dependencies.jar)
-* [bhave.network-0.5-SNAPSHOT-sources.jar](https://dl.dropboxusercontent.com/u/336879/Projects/Releases/bhave.network-0.5-SNAPSHOT-sources.jar)
-* [bhave.network-0.5-SNAPSHOT-javadoc.jar](https://dl.dropboxusercontent.com/u/336879/Projects/Releases/bhave.network-0.5-SNAPSHOT-javadoc.jar)
+### Major Releases
+Current version is 1.0 
+* [bhave.network-1.0.jar](https://dl.dropboxusercontent.com/u/336879/projects/releases/bhave.network/bhave.network-1.0-jar-with-dependencies.jar)
+* [bhave.network-1.0-sources.jar](https://dl.dropboxusercontent.com/u/336879/projects/releases/bhave.network/bhave.network-1.0-sources.jar)
+* [bhave.network-1.0-javadoc.jar](https://dl.dropboxusercontent.com/u/336879/projects/releases/bhave.network/bhave.network-1.0-javadoc.jar)
 
 
 
-## A brief overview
+## A Brief Overview
 ### Hello Network
 There are three basic building blocks in this network API: `Network` objects, `Node` objects and `Link` objects.
 
@@ -107,7 +107,7 @@ refer the same object.
  B-Have Network Library
  
  * Copyright (C) 2013 Davide Nunes 
- * Authors : Davide Nunes <davex.pt@gmail.com>
+ * Authors : Davide Nunes <mail@davidenunes.com> / http://davidenunes.com
  * Website : http://bhaveproject.org
  
  The b-have network library is free software: you can redistribute it and/or modify
