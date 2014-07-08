@@ -8,12 +8,7 @@ which is a dependency injection framework from *Google* that allows for code mod
 
 ## Latest releases
 ### Major Releases
-Current version is 1.0 
-* [bhave.network-1.0.jar](https://dl.dropboxusercontent.com/u/336879/projects/releases/bhave.network/bhave.network-1.0-jar-with-dependencies.jar)
-* [bhave.network-1.0-sources.jar](https://dl.dropboxusercontent.com/u/336879/projects/releases/bhave.network/bhave.network-1.0-sources.jar)
-* [bhave.network-1.0-javadoc.jar](https://dl.dropboxusercontent.com/u/336879/projects/releases/bhave.network/bhave.network-1.0-javadoc.jar)
-
-
+Current version is 1.0, get it [here](https://github.com/b-have/bhave.network/releases/tag/v1.0)
 
 ## A Brief Overview
 ### Hello Network
