@@ -16,42 +16,57 @@ import com.google.inject.Injector;
 
 public class KRegularTest {
 
-	private static final Injector injector = Guice
-			.createInjector(new NetworkModule());
+    private static final Injector injector = Guice
+            .createInjector(new NetworkModule());
 
-	@Test
-	public void generateDefaultTest() {
-		NetworkModel model = injector.getInstance(KRegularModel.class);
+    @Test
+    public void generateDefaultTest() {
+        NetworkModel model = injector.getInstance(KRegularModel.class);
+        Network network = model.generate();
+        assertNotNull(network);
+    }
 
-		Network network = model.generate();
-		assertNotNull(network);
-	}
+    @Test
+    public void configAndGenerateTest() {
+        NetworkModel model = injector.getInstance(KRegularModel.class);
 
-	@Test
-	public void configAndGenerateTest() {
-		NetworkModel model = injector.getInstance(KRegularModel.class);
+        Configuration config = model.getConfiguration();
+        config.setProperty("k", 10);
+        config.setProperty("numNodes", 100);
 
-		Configuration config = model.getConfiguration();
-		config.setProperty("k", 10);
-		config.setProperty("numNodes", 100);
+        try {
+            model.configure(config);
+        } catch (ConfigurationException e) {
+            fail("configuration failled");
+        }
 
-		try {
-			model.configure(config);
-		} catch (ConfigurationException e) {
-			fail("configuration failled");
-		}
+        Network network = model.generate();
+        assertNotNull(network);
 
-		Network network = model.generate();
-		assertNotNull(network);
+        int sumDeg = 0;
+        for (Node node : network.getNodes()) {
+            int d = network.getNeighbours(node).size();
+            assertEquals(20, d);
+            sumDeg += d;
+        }
+        assertEquals(2 * network.getLinkCount(), sumDeg);
 
-		int sumDeg = 0;
-		for (Node node : network.getNodes()) {
-			int d = network.getNeighbours(node).size();
-			assertEquals(20, d);
-			sumDeg += d;
-		}
-		assertEquals(2*network.getLinkCount(), sumDeg);
+    }
 
-	}
+    public void getNeighboursTest() throws ConfigurationException {
+        NetworkModel model = injector.getInstance(KRegularModel.class);
+
+        Configuration config = model.getConfiguration();
+        config.setProperty("k", 1);
+        config.setProperty("numNodes", 10);
+        model.configure(config);
+        Network network = model.generate();
+
+        for (Node node : network.getNodes()) {
+            int neighbours = network.getNeighbours(node).size();
+            assertEquals(2, neighbours);
+        }
+
+    }
 
 }
