@@ -102,8 +102,7 @@ refer the same object.
  B-Have Network Library
  
  * Copyright (C) 2013 Davide Nunes 
- * Authors : Davide Nunes <mail@davidenunes.com> / http://davidenunes.com
- * Website : http://bhaveproject.org
+ * Authors : Davide Nunes http://davidenunes.com
  
  The b-have network library is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
