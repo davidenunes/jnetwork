@@ -1,14 +1,10 @@
-# B-Have Network Library
+# JNetworkX Library
 A simple lightweight **network / graph library** written in Java. This is a software library that provides a simple set of tools 
 to model and analyse data that can be represented as a graph or network. It provides facilities to treat a network
 either as directed or undirected using the same simple `Network` API. 
 
 This library hides the implementation details by using the [Guice](http://code.google.com/p/google-guice/)
 which is a dependency injection framework from *Google* that allows for code modularity.
-
-## Latest releases
-### Major Releases
-[bhave.network-v1.0](https://github.com/b-have/bhave.network/releases/tag/v1.0)
 
 ## A Brief Overview
 ### Hello Network
@@ -99,22 +95,22 @@ done for `t=5`. Also note that if you set the time on the `network` object, the 
 refer the same object.
 
 ## Licence
- B-Have Network Library
+ JNetworkX
  
  * Copyright (C) 2013 Davide Nunes 
  * Authors : Davide Nunes http://davidenunes.com
  
- The b-have network library is free software: you can redistribute it and/or modify
+ The JNetworkX library is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
  
- The b-have network library is distributed in the hope that it will be useful,
+ The JNetworkX library is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
  
  You should have received a copy of the GNU General Public License
- along with the b-have network library.  
+ along with the JNetworkX library.  
  If not, see [GPL 3.0](http://www.gnu.org/licenses/gpl.html).
  
